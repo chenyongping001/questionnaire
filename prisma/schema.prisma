@@ -9,3 +9,106 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model TravelService {
+  id                        Int                           @id @default(autoincrement())
+  title                     String                        @db.VarChar(255)
+  description               String                        @db.VarChar(255)
+  ratingUsers               String                        @db.Text
+  travelAgency              String                        @db.VarChar(255)
+  travelDestination         String                        @db.VarChar(255)
+  tracelStartDate           String                        @db.VarChar(15)
+  tracelEndDate             String                        @db.VarChar(15)
+  status                    TravelServiceStatus           @default(DRAFT)
+  createBy                  String                        @db.VarChar(255)
+  createAt                  DateTime                      @default(now())
+  updateAt                  DateTime                      @updatedAt
+  ratingItems               RatingItemsOnTravelServices[]
+  remarkItems               RemarkItemsOnTravelServices[]
+  UserRatingOfTracelService UserRatingOfTravelService[]
+}
+
+enum TravelServiceStatus {
+  DRAFT
+  RATING
+  ENDED
+}
+
+model RatingItem {
+  id             Int                           @id @default(autoincrement())
+  title          String                        @db.VarChar(255)
+  travelServices RatingItemsOnTravelServices[]
+  ratingValues   ValuesOnRatingItems[]
+}
+
+model RatingItemsOnTravelServices {
+  id              Int           @id @default(autoincrement())
+  travelService   TravelService @relation(fields: [travelServiceId], references: [id])
+  travelServiceId Int // relation scalar field (used in the `@relation` attribute above)
+  ratingItem      RatingItem    @relation(fields: [ratingItemId], references: [id])
+  ratingItemId    Int // relation scalar field (used in the `@relation` attribute above)
+
+  @@unique([travelServiceId, ratingItemId])
+}
+
+model RatingValue {
+  id          Int                   @id @default(autoincrement())
+  title       String                @db.VarChar(255)
+  value       Int
+  ratingItems ValuesOnRatingItems[]
+}
+
+model ValuesOnRatingItems {
+  id            Int            @id @default(autoincrement())
+  ratingItem    RatingItem     @relation(fields: [ratingItemId], references: [id])
+  ratingItemId  Int // relation scalar field (used in the `@relation` attribute above)
+  ratingValue   RatingValue    @relation(fields: [ratingValueId], references: [id])
+  ratingValueId Int
+  RatingDetail  RatingDetail[]
+
+  @@unique([ratingItemId, ratingValueId])
+}
+
+model RemarkItem {
+  id             Int                           @id @default(autoincrement())
+  title          String                        @db.VarChar(255)
+  travelServices RemarkItemsOnTravelServices[]
+  RemarkDetail   RemarkDetail[]
+}
+
+model RemarkItemsOnTravelServices {
+  id              Int           @id @default(autoincrement())
+  travelService   TravelService @relation(fields: [travelServiceId], references: [id])
+  travelServiceId Int
+  remarkItem      RemarkItem    @relation(fields: [remarkItemId], references: [id])
+  remarkItemId    Int
+
+  @@unique([travelServiceId, remarkItemId])
+}
+
+model UserRatingOfTravelService {
+  id              Int            @id @default(autoincrement())
+  travelService   TravelService  @relation(fields: [travelServiceId], references: [id])
+  travelServiceId Int
+  ratingBy        String         @db.VarChar(255)
+  ratingAt        DateTime       @default(now())
+  RatingDetail    RatingDetail[]
+  RemarkDetail    RemarkDetail[]
+}
+
+model RatingDetail {
+  id                          Int                       @id @default(autoincrement())
+  userRatingOfTravelService   UserRatingOfTravelService @relation(fields: [userRatingOfTravelServiceId], references: [id])
+  userRatingOfTravelServiceId Int
+  valuesOnRatingItems         ValuesOnRatingItems       @relation(fields: [valuesOnRatingItemsId], references: [id])
+  valuesOnRatingItemsId       Int
+}
+
+model RemarkDetail {
+  id                          Int                       @id @default(autoincrement())
+  userRatingOfTravelService   UserRatingOfTravelService @relation(fields: [userRatingOfTravelServiceId], references: [id])
+  userRatingOfTravelServiceId Int
+  remarkItem                  RemarkItem                @relation(fields: [remarkItemId], references: [id])
+  remarkItemId                Int // relation scalar field (used in the `@relation` attribute above)
+  remarkContent               String                    @db.Text
+}
