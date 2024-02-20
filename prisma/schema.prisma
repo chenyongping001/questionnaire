@@ -11,20 +11,20 @@ datasource db {
 }
 
 model TravelService {
-  id                        Int                           @id @default(autoincrement())
-  title                     String                        @db.VarChar(255)
-  description               String                        @db.VarChar(255)
-  ratingUsers               String                        @db.Text
-  travelAgency              String                        @db.VarChar(255)
-  travelDestination         String                        @db.VarChar(255)
-  tracelStartDate           String                        @db.VarChar(15)
-  tracelEndDate             String                        @db.VarChar(15)
-  status                    TravelServiceStatus           @default(DRAFT)
-  createBy                  String                        @db.VarChar(255)
-  createAt                  DateTime                      @default(now())
-  updateAt                  DateTime                      @updatedAt
-  ratingItems               RatingItemsOnTravelServices[]
-  remarkItems               RemarkItemsOnTravelServices[]
+  id                        Int                         @id @default(autoincrement())
+  title                     String                      @db.VarChar(255)
+  description               String                      @db.VarChar(255)
+  ratingUsers               String                      @db.Text
+  travelAgency              String                      @db.VarChar(255)
+  travelDestination         String                      @db.VarChar(255)
+  travelStartDate           String                      @db.VarChar(15)
+  travelEndDate             String                      @db.VarChar(15)
+  status                    TravelServiceStatus         @default(DRAFT)
+  createBy                  String                      @db.VarChar(255)
+  createAt                  DateTime                    @default(now())
+  updateAt                  DateTime                    @updatedAt
+  ratingTemplate            RatingTemplate              @relation(fields: [ratingTemplateId], references: [id])
+  ratingTemplateId          Int
   UserRatingOfTracelService UserRatingOfTravelService[]
 }
 
@@ -34,21 +34,29 @@ enum TravelServiceStatus {
   ENDED
 }
 
-model RatingItem {
-  id             Int                           @id @default(autoincrement())
-  title          String                        @db.VarChar(255)
-  travelServices RatingItemsOnTravelServices[]
-  ratingValues   ValuesOnRatingItems[]
+model RatingTemplate {
+  id             Int                      @id @default(autoincrement())
+  name           String
+  ratingItems    RatingItemsOnTemplates[]
+  remarkItems    RemarkItemsOnTemplates[]
+  travelServices TravelService[]
 }
 
-model RatingItemsOnTravelServices {
-  id              Int           @id @default(autoincrement())
-  travelService   TravelService @relation(fields: [travelServiceId], references: [id])
-  travelServiceId Int // relation scalar field (used in the `@relation` attribute above)
-  ratingItem      RatingItem    @relation(fields: [ratingItemId], references: [id])
-  ratingItemId    Int // relation scalar field (used in the `@relation` attribute above)
+model RatingItem {
+  id           Int                      @id @default(autoincrement())
+  title        String                   @db.VarChar(255)
+  templates    RatingItemsOnTemplates[]
+  ratingValues ValuesOnRatingItems[]
+}
 
-  @@unique([travelServiceId, ratingItemId])
+model RatingItemsOnTemplates {
+  id               Int            @id @default(autoincrement())
+  ratingTemplate   RatingTemplate @relation(fields: [ratingTemplateId], references: [id])
+  ratingTemplateId Int // relation scalar field (used in the `@relation` attribute above)
+  ratingItem       RatingItem     @relation(fields: [ratingItemId], references: [id])
+  ratingItemId     Int // relation scalar field (used in the `@relation` attribute above)
+
+  @@unique([ratingTemplateId, ratingItemId])
 }
 
 model RatingValue {
@@ -70,20 +78,21 @@ model ValuesOnRatingItems {
 }
 
 model RemarkItem {
-  id             Int                           @id @default(autoincrement())
-  title          String                        @db.VarChar(255)
-  travelServices RemarkItemsOnTravelServices[]
-  RemarkDetail   RemarkDetail[]
+  id           Int                      @id @default(autoincrement())
+  title        String                   @db.VarChar(255)
+  description  String
+  templates    RemarkItemsOnTemplates[]
+  RemarkDetail RemarkDetail[]
 }
 
-model RemarkItemsOnTravelServices {
-  id              Int           @id @default(autoincrement())
-  travelService   TravelService @relation(fields: [travelServiceId], references: [id])
-  travelServiceId Int
-  remarkItem      RemarkItem    @relation(fields: [remarkItemId], references: [id])
-  remarkItemId    Int
+model RemarkItemsOnTemplates {
+  id               Int            @id @default(autoincrement())
+  ratingTemplate   RatingTemplate @relation(fields: [ratingTemplateId], references: [id])
+  ratingTemplateId Int // relation scalar field (used in the `@relation` attribute above)
+  remarkItem       RemarkItem     @relation(fields: [remarkItemId], references: [id])
+  remarkItemId     Int
 
-  @@unique([travelServiceId, remarkItemId])
+  @@unique([ratingTemplateId, remarkItemId])
 }
 
 model UserRatingOfTravelService {
