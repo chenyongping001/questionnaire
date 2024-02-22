@@ -17,8 +17,8 @@ model TravelService {
   ratingUsers               String                      @db.Text
   travelAgency              String                      @db.VarChar(255)
   travelDestination         String                      @db.VarChar(255)
-  travelStartDate           String                      @db.VarChar(15)
-  travelEndDate             String                      @db.VarChar(15)
+  travelStartDate           String                      @db.VarChar(255)
+  travelEndDate             String                      @db.VarChar(255)
   status                    TravelServiceStatus         @default(DRAFT)
   createBy                  String                      @db.VarChar(255)
   createAt                  DateTime                    @default(now())
