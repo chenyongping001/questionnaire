@@ -30,14 +30,13 @@ const RatingUserItem = ({ ygdm, ygmc, onMinus }: Props) => {
         </Flex>
         <Flex className="items-center">
           <Button
+            size={"1"}
             color="red"
             variant="soft"
             className="align-middle h-full"
             onClick={onMinus}
           >
-            <Text className="text-xl" weight={"bold"}>
-              -
-            </Text>
+            <Text size={"3"}>-</Text>
           </Button>
         </Flex>
       </Grid>

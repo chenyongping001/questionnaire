@@ -32,10 +32,9 @@ const TravelServiceForm = ({ travelService }: Props) => {
   const [error, setError] = useState("");
   const router = useRouter();
   const [isSubmitting, setSubmitting] = useState(false);
-  const [selectedRatingUsers, setSelectedRatingUsers] = useState<RatingUser[]>([
-    { ygdm: "96144", ygmc: "周扒皮" },
-    { ygdm: "96148", ygmc: "周王八" },
-  ]);
+  const [selectedRatingUsers, setSelectedRatingUsers] = useState<RatingUser[]>(
+    []
+  );
 
   const {
     register,
@@ -157,7 +156,7 @@ const TravelServiceForm = ({ travelService }: Props) => {
             <SelectedRatingUsers
               selectedRatingUsers={selectedRatingUsers}
               onSelectedUser={handleSelectedUser}
-              onUnselectUser={handleSelectedUser}
+              onUnselectUser={handleUnselectUser}
             />
           </Box>
         </Flex>
@@ -167,7 +166,7 @@ const TravelServiceForm = ({ travelService }: Props) => {
           type="submit"
           disabled={isSubmitting}
         >
-          {travelService ? "更新疗休养评分表" : "新建疗休养评分表"}
+          {travelService ? "更新疗休养评分表" : "生成疗休养评分表"}
           {isSubmitting && <Spinner />}
         </Button>
       </form>
@@ -181,7 +180,8 @@ const TravelServiceForm = ({ travelService }: Props) => {
   }
 
   function handleSelectedUser(user: RatingUser) {
-    setSelectedRatingUsers([...selectedRatingUsers, user]);
+    selectedRatingUsers.filter((existUser) => existUser.ygdm === user.ygdm)
+      .length === 0 && setSelectedRatingUsers([...selectedRatingUsers, user]);
   }
 
   function handleUnselectUser(unselectedUser: RatingUser) {

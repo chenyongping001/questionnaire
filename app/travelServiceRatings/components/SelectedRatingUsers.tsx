@@ -1,6 +1,15 @@
 "use client";
-import { Flex, Grid, Text } from "@radix-ui/themes";
+import {
+  Box,
+  Button,
+  Dialog,
+  Flex,
+  Grid,
+  Text,
+  TextField,
+} from "@radix-ui/themes";
 import RatingUserItem from "./RatingUserItem";
+import SearchSelect, { SelectItem } from "./SearchSelect";
 
 export type RatingUser = {
   ygdm: string;
@@ -28,17 +37,49 @@ const SelectedRatingUsers = ({
           onMinus={() => onUnselectUser(user)}
         />
       ))}
+      <Box>
+        <Dialog.Root>
+          <Dialog.Trigger>
+            <Button
+              variant="soft"
+              style={{ width: "100%", height: "100%" }}
+              radius="large"
+            >
+              <Text className="text-xl" weight={"bold"} color="indigo">
+                +
+              </Text>
+            </Button>
+          </Dialog.Trigger>
 
-      <label className="flex justify-center items-center bg-slate-200 label-input">
-        <input
-          type="button"
-          hidden
-          onClick={() => onSelectedUser({ ygdm: "96143", ygmc: "陈永平" })}
-        />
-        <Text className="text-2xl" weight={"bold"} color="indigo">
-          +
-        </Text>
-      </label>
+          <Dialog.Content style={{ maxWidth: 450 }}>
+            <Dialog.Title>添加疗休养人员</Dialog.Title>
+            <Dialog.Description size="2" mb="4">
+              只允许添加正式职工。搜索并选择名字进行添加，可以不关闭当前对话框重复添加。
+            </Dialog.Description>
+
+            <Flex direction="column" gap="3">
+              <label>
+                <SearchSelect
+                  endpoint="/api/mis/employees"
+                  minChar={2}
+                  size="2"
+                  searchPlaceHolder="疗休养人员姓名"
+                  onItemSelect={(item?: SelectItem) =>
+                    item &&
+                    onSelectedUser({ ygdm: item.value, ygmc: item.label })
+                  }
+                />
+              </label>
+            </Flex>
+
+            <Flex gap="3" mt="4" justify="end">
+              <Dialog.Close>
+                <Button>关闭</Button>
+              </Dialog.Close>
+            </Flex>
+          </Dialog.Content>
+        </Dialog.Root>
+      </Box>
     </Grid>
   );
 };
