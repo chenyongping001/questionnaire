@@ -40,15 +40,21 @@ const SelectedRatingUsers = ({
       <Box>
         <Dialog.Root>
           <Dialog.Trigger>
-            <Button
-              variant="soft"
-              style={{ width: "100%", height: "100%" }}
-              radius="large"
+            {/* <Button
+                variant="soft"
+                style={{ width: "100%", height: "100%" }}
+                radius="large"
+              >
+                <Text className="text-xl" weight={"bold"} color="indigo" >
+                  +
+                </Text>
+              </Button> */}
+            <button
+              type="button"
+              className="h-full w-full text-xl font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700  dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
             >
-              <Text className="text-xl" weight={"bold"} color="indigo">
-                +
-              </Text>
-            </Button>
+              +
+            </button>
           </Dialog.Trigger>
 
           <Dialog.Content style={{ maxWidth: 450 }}>
@@ -62,7 +68,7 @@ const SelectedRatingUsers = ({
                 <SearchSelect
                   endpoint="/api/mis/employees"
                   minChar={2}
-                  size="2"
+                  size="3"
                   searchPlaceHolder="疗休养人员姓名"
                   onItemSelect={(item?: SelectItem) =>
                     item &&
@@ -74,7 +80,12 @@ const SelectedRatingUsers = ({
 
             <Flex gap="3" mt="4" justify="end">
               <Dialog.Close>
-                <Button>关闭</Button>
+                <button
+                  type="button"
+                  className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm  px-5 py-2.5 text-center"
+                >
+                  关闭
+                </button>
               </Dialog.Close>
             </Flex>
           </Dialog.Content>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { env } from "process";
 
-const fetchOriginEmployees = async (search:string)=>await axios
+export const fetchOriginEmployees = async (search:string)=>await axios
       .get(`http://10.160.128.5:8000/mis/employeephones/?search=${search}`, {
         headers: {
           Authorization: env.MIS_AUTHORIZATION,

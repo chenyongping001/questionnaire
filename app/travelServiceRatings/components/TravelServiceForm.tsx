@@ -145,14 +145,6 @@ const TravelServiceForm = ({ travelService }: Props) => {
           </Heading>
 
           <Box pt="1">
-            {/* <SelectedRatingUsers selectedRatingUsers=
-                  ={selectedAttachments.filter(
-                    (attachment) =>
-                      attachment.attachmentType === AttachmentType.IDCARD
-                  )}
-                  onSelectedFile={handleIdcardSelectedFile}
-                  onUnselectFile={handleUnselectFile}
-                /> */}
             <SelectedRatingUsers
               selectedRatingUsers={selectedRatingUsers}
               onSelectedUser={handleSelectedUser}
@@ -163,7 +155,7 @@ const TravelServiceForm = ({ travelService }: Props) => {
         <Button
           variant="solid"
           size={"3"}
-          type="submit"
+          //   type="submit"
           disabled={isSubmitting}
         >
           {travelService ? "更新疗休养评分表" : "生成疗休养评分表"}
