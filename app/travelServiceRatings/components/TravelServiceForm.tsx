@@ -8,12 +8,8 @@ import {
   Box,
   Button,
   Callout,
-  Card,
   Flex,
-  Grid,
   Heading,
-  Tabs,
-  Text,
   TextArea,
   TextField,
 } from "@radix-ui/themes";
@@ -23,13 +19,15 @@ import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import SelectedRatingUsers, { RatingUser } from "./SelectedRatingUsers";
+import { useSession } from "next-auth/react";
 
 interface Props {
   travelService?: TravelService;
 }
 const TravelServiceForm = ({ travelService }: Props) => {
   type TravelServiceForm = z.infer<typeof travelServiceSchema>;
-  const [error, setError] = useState("");
+  const { data: session } = useSession();
+  const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
   const [isSubmitting, setSubmitting] = useState(false);
   const [selectedRatingUsers, setSelectedRatingUsers] = useState<RatingUser[]>(
@@ -38,11 +36,7 @@ const TravelServiceForm = ({ travelService }: Props) => {
 
   const {
     register,
-    control,
     handleSubmit,
-    setValue,
-    getValues,
-    watch,
     formState: { errors },
   } = useForm<TravelServiceForm>({
     resolver: zodResolver(travelServiceSchema),
@@ -54,17 +48,33 @@ const TravelServiceForm = ({ travelService }: Props) => {
     // { name: "ratingUsers", label: "评分用户" },
     { name: "travelAgency", label: "旅行社" },
     { name: "travelDestination", label: "目的地" },
+    { name: "travelStartDate", label: "开始日期" },
+    { name: "travelEndDate", label: "结束日期" },
     // { name: "createBy", label: "创建人" },
     // { name: "ratingTemplateId", label: "评分表模板" },
   ];
-  const dateFields: { name: nameEnum; label: string }[] = [
-    { name: "travelStartDate", label: "开始日期" },
-    { name: "travelEndDate", label: "结束日期" },
-  ];
+
   const onSubmit = handleSubmit(async (data) => {
+    if (selectedRatingUsers.length < 1) {
+      //   console.log(selectedRatingUsers.length);
+      showError("请添加疗休养人员");
+      return;
+    }
+    const ratingUsers = selectedRatingUsers
+      .map((user) => user.ygdm + "|" + user.ygmc)
+      .join(",");
+
+    if (!session || session.user?.role !== "ADMIN") {
+      showError("未授权");
+      return;
+    }
+
     setSubmitting(true);
     let submitData: FieldValues = {
       ...data,
+      ratingUsers: ratingUsers,
+      ratingTemplateId: 1,
+      createBy: session.user!.ygdm + "|" + session.user!.ygmc,
     };
 
     try {
@@ -77,18 +87,17 @@ const TravelServiceForm = ({ travelService }: Props) => {
       router.push("/travelServiceRatings");
       router.refresh();
     } catch (error: AxiosError | any) {
-      console.log(error);
       if (axios.isAxiosError(error)) {
-        showError(JSON.stringify(error.response?.data));
+        showError(JSON.stringify(error.message));
       } else showError("发生了未知错误！");
     }
   });
 
   return (
     <div className="max-w-xl">
-      {error && (
+      {errorMsg && (
         <Callout.Root color="red" className="mb-5">
-          <Callout.Text>{error}</Callout.Text>
+          <Callout.Text>{errorMsg}</Callout.Text>
         </Callout.Root>
       )}
       <form className="space-y-8 pb-8" onSubmit={onSubmit}>
@@ -109,26 +118,7 @@ const TravelServiceForm = ({ travelService }: Props) => {
               <ErrorMessage>{errors[field.name]?.message}</ErrorMessage>
             </div>
           ))}
-          {dateFields.map((field) => (
-            <Grid columns={"3"} key={field.label} gap={"3"}>
-              <Card>
-                {/* <TextField.Root size={"3"} radius="large">
-                  <TextField.Slot>{field.label}</TextField.Slot>
-                </TextField.Root> */}
-                <Text size={"3"} color="gray">
-                  {field.label}
-                </Text>
-              </Card>
 
-              <TextField.Root size={"3"} radius="large" className="col-span-2">
-                <TextField.Input
-                  type="date"
-                  {...register(field.name)}
-                  defaultValue={travelService?.[field.name] || undefined}
-                />
-              </TextField.Root>
-            </Grid>
-          ))}
           <TextArea
             style={{ height: 120 }}
             size={"3"}
@@ -166,7 +156,7 @@ const TravelServiceForm = ({ travelService }: Props) => {
   );
 
   function showError(msg: string) {
-    setError(msg);
+    setErrorMsg(msg);
     setSubmitting(false);
     router.push("#");
   }

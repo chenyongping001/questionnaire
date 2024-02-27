@@ -11,7 +11,9 @@ const TravelServiceRatingsPage = async () => {
       <Button>
         <Link href="/travelServiceRatings/new">Create TravelService</Link>
       </Button>
-      <Text>{session && session.user?.ygmc}</Text>
+      <Button>
+        <Link href="/api/auth/signout">退出用户</Link>
+      </Button>
     </>
   );
 };

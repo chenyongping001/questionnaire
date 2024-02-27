@@ -1,50 +1,19 @@
+import { getToken } from "next-auth/jwt";
+import { NextMiddleware, NextResponse } from "next/server";
 import withAuthorization from "./middlewares/withAuthorization";
-import { NextMiddleware, NextResponse, userAgent } from "next/server";
-const mainMiddleware: NextMiddleware = (request) => {
+const mainMiddleware: NextMiddleware = async (request) => {
   const res = NextResponse.next();
   if (request.nextUrl.pathname === '/') {
-    const url = request.nextUrl
-    const {ua} = userAgent(request)
-    url.searchParams.set('ua',ua);
-    return NextResponse.rewrite(url);
+      const token = await getToken({
+        req: request,
+        secret: process.env.NEXTAUTH_SECRET,
+      });
+      if (!token) {
+        const url = new URL("/wxworkAuthentication", request.url);
+        return NextResponse.redirect(url);
+      }
   }
   return res;
 };
-export default withAuthorization(mainMiddleware, ["/travelServiceRatings", "/api/travelServices", "/api/mis"]);
-
-
-
-// import { getServerSession } from 'next-auth';
-// import { NextRequest, NextResponse, userAgent } from 'next/server'
-// import { authOptions } from './app/api/auth/[...nextauth]/authOptions';
-// import { getSession } from 'next-auth/react';
-
-// // export {default} from "next-auth/middleware";
- 
-// export async function middleware(request: NextRequest) {
-//   if (request.nextUrl.pathname === '/') {
-//     const url = request.nextUrl
-//     const {ua} = userAgent(request)
-//     url.searchParams.set('ua',ua);
-//     return NextResponse.rewrite(url);
-//   }
-
-//   if (!request.nextUrl.pathname.startsWith("/api/auth")) {
-//     const session = await getSession({req:request});
-//     if(!session) return NextResponse.rewrite(new URL('/dashboard/user', request.url));
-//   }
- 
-//   if (request.nextUrl.pathname.startsWith('/dashboard')) {
-//     return NextResponse.rewrite(new URL('/dashboard/user', request.url))
-//   }
-  // if (request.nextUrl.pathname==="/") {
-  //   const url = request.nextUrl
-  //   const {ua} = userAgent(request)
-  //   url.searchParams.set('ua',ua);
-  //   return NextResponse.rewrite(url);
-  // }
-  // if (!request.nextUrl.pathname.startsWith("/api/auth")) {
-  //   const session = await getServerSession(authOptions);
-  //   if(!session) return NextResponse.json({errpr:'未授权'})
-  // }
-// }
+// export default withAuthorization(mainMiddleware, ["/travelServiceRatings", "/api/travelServices", "/api/mis"]);
+export default mainMiddleware;
