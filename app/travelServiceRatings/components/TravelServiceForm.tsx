@@ -20,6 +20,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import SelectedRatingUsers, { RatingUser } from "./SelectedRatingUsers";
 import { useSession } from "next-auth/react";
+import { convertDateToString2 } from "@/app/utilities/trimTime";
 
 interface Props {
   travelService?: TravelService;

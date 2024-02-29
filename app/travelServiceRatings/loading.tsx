@@ -1,28 +1,11 @@
-import { Button, Table, Text } from "@radix-ui/themes";
-import { getServerSession } from "next-auth";
-import Link from "next/link";
 import React from "react";
-import prisma from "@/prisma/client";
-import { authOptions } from "../api/auth/[...nextauth]/authOptions";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { Table } from "@radix-ui/themes";
 import TravelServiceActions from "./components/TravelServiceActions";
-import TravelServiceStatusBadge from "../components/TravelServiceStatusBadge";
 
-const TravelServiceRatingsPage = async () => {
-  const session = await getServerSession(authOptions);
-  const user = session!.user!;
-
-  const travelServices = await prisma.travelService.findMany({
-    where: {
-      ratingUsers: user.role === "ADMIN" ? undefined : { contains: user.ygdm },
-    },
-    orderBy: {
-      createAt: "desc",
-    },
-    include: {
-      UserRatingOfTracelService: true,
-    },
-  });
-
+const LoadingTravelServiceRatingsPage = () => {
+  const travelServiceRatings = [1, 2, 3, 4, 5, 6];
   return (
     <div>
       <TravelServiceActions />
@@ -46,30 +29,25 @@ const TravelServiceRatingsPage = async () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {travelServices.map((travelService) => (
-            <Table.Row key={travelService.id}>
+          {travelServiceRatings.map((travelServiceRating) => (
+            <Table.Row key={travelServiceRating}>
               <Table.Cell>
-                <Link href={`/travelServiceRatings/${travelService.id}`}>
-                  {travelService.title}
-                </Link>
-                <div className="block md:hidden text-gray-500 mt-1 text-xs">
-                  {travelService.travelDestination}
-                </div>
+                <Skeleton />
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {travelService.travelAgency}
+                <Skeleton />
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {travelService.travelDestination}
+                <Skeleton />
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {travelService.travelStartDate}
+                <Skeleton />
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {travelService.travelEndDate}
+                <Skeleton />
               </Table.Cell>
               <Table.Cell>
-                <TravelServiceStatusBadge status={travelService.status} />
+                <Skeleton />
               </Table.Cell>
             </Table.Row>
           ))}
@@ -79,4 +57,4 @@ const TravelServiceRatingsPage = async () => {
   );
 };
 
-export default TravelServiceRatingsPage;
+export default LoadingTravelServiceRatingsPage;

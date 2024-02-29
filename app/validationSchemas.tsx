@@ -10,6 +10,6 @@ export const travelServiceSchema = z.object({
   travelDestination: z.string().min(1, "请输入疗休养目的地").max(255),
   travelStartDate: z.coerce.date(),
   travelEndDate: z.coerce.date(),
-  // createBy: z.string().length(5, "创建人不正确"),
+  createBy: z.string().optional(),
   // ratingTemplateId: z.coerce.number().int().positive(),
 });

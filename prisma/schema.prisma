@@ -101,8 +101,8 @@ model UserRatingOfTravelService {
   travelServiceId Int
   ratingBy        String         @db.VarChar(255)
   ratingAt        DateTime       @default(now())
-  RatingDetail    RatingDetail[]
-  RemarkDetail    RemarkDetail[]
+  ratingDetails   RatingDetail[]
+  remarkDetails   RemarkDetail[]
 }
 
 model RatingDetail {
