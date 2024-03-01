@@ -85,7 +85,7 @@ const TravelServiceForm = ({ travelService }: Props) => {
           submitData
         );
       else await axios.post("/api/travelServices/", submitData);
-      router.push("/travelServiceRatings");
+      router.push("/travelServices");
       router.refresh();
     } catch (error: AxiosError | any) {
       if (axios.isAxiosError(error)) {

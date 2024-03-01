@@ -8,7 +8,7 @@ const NavBar = () => {
   const path = usePathname();
   const links = [
     { href: "/", label: "统计图表" },
-    { href: "/travelServiceRatings", label: "疗休养评分" },
+    { href: "/travelServices", label: "疗休养评分" },
   ];
   return (
     <nav className="flex space-x-6 mb-5 px-5 border-b items-center h-14">

@@ -1,7 +1,7 @@
 import { Box, Flex, Grid } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
-// import DeleteWorkerButton from "../components/DeleteWorkerButton";
-// import EditWorkerButton from "../components/EditWorkerButton";
+import DeleteTravelServiceButton from "../components/DeleteTravelServiceButton";
+import EditTravelServiceButton from "../components/EditTravelServiceButton";
 import TravelServiceDetail from "../components/TravelServiceDetail";
 import { getTravelService } from "./getTravelService";
 
@@ -18,12 +18,12 @@ const TravelServiceDetailPage = async ({ params }: Props) => {
       <Box className="md:col-span-4">
         <TravelServiceDetail travelService={travelService} />
       </Box>
-      {/* <Box>
+      <Box>
         <Flex direction={"column"} gap={"3"}>
-          <EditWorkerButton workerId={travelService.id} />
-          <DeleteWorkerButton workerId={travelService.id} />
+          <EditTravelServiceButton travelServiceId={travelService.id} />
+          <DeleteTravelServiceButton travelServiceId={travelService.id} />
         </Flex>
-      </Box> */}
+      </Box>
     </Grid>
   );
 };
