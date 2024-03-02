@@ -6,6 +6,7 @@ import ShowTravelServiceFields, {
   travelServiceField,
 } from "./ShowTravelServiceFields";
 import { convertDateToString } from "@/app/utilities/trimTime";
+import { formatToRatingUser } from "./formatToRatingUser";
 
 const workerWithAttachments =
   Prisma.validator<Prisma.TravelServiceDefaultArgs>()({
@@ -22,16 +23,10 @@ const TravelServiceDetail = async ({
     {
       name: "travelStartDate",
       label: "开始日期",
-      needSub: true,
-      start: 0,
-      end: 10,
     },
     {
       name: "travelEndDate",
       label: "结束日期",
-      needSub: true,
-      start: 0,
-      end: 10,
     },
     {
       name: "createBy",
@@ -58,7 +53,9 @@ const TravelServiceDetail = async ({
         <Heading size={"3"} color="gray" className="pt-3 px-3">
           疗休养人员名单
         </Heading>
-        <ShowRatingUsers ratingUsers={travelService.ratingUsers} />
+        <ShowRatingUsers
+          ratingUsers={formatToRatingUser(travelService.ratingUsers)}
+        />
       </Flex>
     </>
   );

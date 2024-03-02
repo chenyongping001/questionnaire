@@ -5,6 +5,7 @@ import { travelServiceSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TravelService } from "@prisma/client";
 import {
+  Text,
   Box,
   Button,
   Callout,
@@ -20,7 +21,8 @@ import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import SelectedRatingUsers, { RatingUser } from "./SelectedRatingUsers";
 import { useSession } from "next-auth/react";
-import { convertDateToString2 } from "@/app/utilities/trimTime";
+import { formatToRatingUser } from "./formatToRatingUser";
+import { FiDelete } from "react-icons/fi";
 
 interface Props {
   travelService?: TravelService;
@@ -32,7 +34,7 @@ const TravelServiceForm = ({ travelService }: Props) => {
   const router = useRouter();
   const [isSubmitting, setSubmitting] = useState(false);
   const [selectedRatingUsers, setSelectedRatingUsers] = useState<RatingUser[]>(
-    []
+    travelService ? formatToRatingUser(travelService.ratingUsers) : []
   );
 
   const {
@@ -43,17 +45,18 @@ const TravelServiceForm = ({ travelService }: Props) => {
     resolver: zodResolver(travelServiceSchema),
   });
   type nameEnum = keyof typeof travelServiceSchema.shape;
-  const textFields: { name: nameEnum; label: string }[] = [
-    { name: "title", label: "标题" },
-    // { name: "description", label: "说明" },
-    // { name: "ratingUsers", label: "评分用户" },
-    { name: "travelAgency", label: "旅行社" },
-    { name: "travelDestination", label: "目的地" },
-    { name: "travelStartDate", label: "开始日期" },
-    { name: "travelEndDate", label: "结束日期" },
-    // { name: "createBy", label: "创建人" },
-    // { name: "ratingTemplateId", label: "评分表模板" },
-  ];
+  const textFields: { name: nameEnum; label: string; placeholder?: string }[] =
+    [
+      { name: "title", label: "标题" },
+      // { name: "description", label: "说明" },
+      // { name: "ratingUsers", label: "评分用户" },
+      { name: "travelAgency", label: "旅行社" },
+      { name: "travelDestination", label: "目的地" },
+      { name: "travelStartDate", label: "开始日期", placeholder: "YYYY-MM-DD" },
+      { name: "travelEndDate", label: "结束日期", placeholder: "YYYY-MM-DD" },
+      // { name: "createBy", label: "创建人" },
+      // { name: "ratingTemplateId", label: "评分表模板" },
+    ];
 
   const onSubmit = handleSubmit(async (data) => {
     if (selectedRatingUsers.length < 1) {
@@ -75,8 +78,13 @@ const TravelServiceForm = ({ travelService }: Props) => {
       ...data,
       ratingUsers: ratingUsers,
       ratingTemplateId: 1,
-      createBy: session.user!.ygdm + "|" + session.user!.ygmc,
     };
+    if (!travelService) {
+      submitData = {
+        ...submitData,
+        createBy: session.user!.ygdm + "|" + session.user!.ygmc,
+      };
+    }
 
     try {
       if (travelService)
@@ -112,6 +120,7 @@ const TravelServiceForm = ({ travelService }: Props) => {
               <TextField.Root size={"3"} radius="large">
                 <TextField.Slot>{field.label}</TextField.Slot>
                 <TextField.Input
+                  placeholder={field.placeholder}
                   {...register(field.name)}
                   defaultValue={travelService?.[field.name] || undefined}
                 />

@@ -1,22 +1,22 @@
 import { Box, Card, Grid, Text } from "@radix-ui/themes";
+import { RatingUser } from "./SelectedRatingUsers";
 
 interface Props {
-  ratingUsers: string;
+  ratingUsers: RatingUser[];
 }
 
 const ShowRatingUsers = ({ ratingUsers }: Props) => {
-  const users = ratingUsers.split(",");
   return (
     <Grid gap="1" columns="3">
-      {users.map((user) => (
-        <Card>
+      {ratingUsers.map((user) => (
+        <Card key={user.ygdm}>
           <Box>
             <Text as="div" size="1" weight="bold">
-              {user.split("|")[1]}
+              {user.ygmc}
             </Text>
 
             <Text as="div" size="1" color="gray">
-              {user.split("|")[0]}
+              {user.ygdm}
             </Text>
           </Box>
         </Card>
