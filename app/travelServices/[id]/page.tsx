@@ -6,6 +6,7 @@ import TravelServiceDetail from "../components/TravelServiceDetail";
 import { getTravelService } from "./getTravelService";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import RatingTravelServiceButton from "../components/RatingTravelServiceButton";
 
 interface Props {
   params: { id: string };
@@ -25,6 +26,7 @@ const TravelServiceDetailPage = async ({ params }: Props) => {
         <Flex direction={"column"} gap={"3"}>
           <EditTravelServiceButton travelServiceId={travelService.id} />
           <DeleteTravelServiceButton travelServiceId={travelService.id} />
+          <RatingTravelServiceButton travelServiceId={travelService.id} />
         </Flex>
       </Box>
     </Grid>
