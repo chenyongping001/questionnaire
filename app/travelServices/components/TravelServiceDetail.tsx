@@ -7,15 +7,18 @@ import ShowTravelServiceFields, {
 } from "./ShowTravelServiceFields";
 import { convertDateToString } from "@/app/utilities/trimTime";
 import { formatToRatingUser } from "./formatToRatingUser";
+import { includeOfTravelService } from "../[id]/getTravelService";
 
-const workerWithAttachments =
+const TravelServiceWithAttachments =
   Prisma.validator<Prisma.TravelServiceDefaultArgs>()({
-    include: { UserRatingOfTracelService: true },
+    include: includeOfTravelService,
   });
 const TravelServiceDetail = async ({
   travelService,
 }: {
-  travelService: Prisma.TravelServiceGetPayload<typeof workerWithAttachments>;
+  travelService: Prisma.TravelServiceGetPayload<
+    typeof TravelServiceWithAttachments
+  >;
 }) => {
   const part1Fields: travelServiceField[] = [
     { name: "travelAgency", label: "旅行社" },

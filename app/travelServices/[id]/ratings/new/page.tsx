@@ -1,8 +1,9 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import { Box, Flex, Grid } from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
-import React from "react";
-import { getTravelService } from "../../getTravelService";
 import { notFound } from "next/navigation";
+import { getTravelService } from "../../getTravelService";
+import RatingTravelServiceForm from "../components/RatingTravelServiceForm";
 
 interface Props {
   params: { id: string };
@@ -16,36 +17,43 @@ const NewRatingPage = async ({ params }: Props) => {
   const session = await getServerSession(authOptions);
   const travelService = await getTravelService(params.id, session!);
   if (!travelService) notFound();
+
   return (
-    <div>
-      <ul>
-        <li>{travelService.title}</li>
-        <li>{travelService.description}</li>
-        <li>{travelService.travelAgency}</li>
-        <li>{travelService.travelStartDate}</li>
-        <li>{travelService.travelEndDate}</li>
-        <li>{travelService.ratingTemplate.id}</li>
-        <li>{travelService.ratingTemplate.name}</li>
-        <li>
-          <ul>
-            {travelService.ratingTemplate.ratingItems.map((ratingItem) => (
-              <li key={ratingItem.id}>
-                {ratingItem.ratingItem.title}
-                <ul>
-                  {ratingItem.ratingItem.ratingValues.map((ratingValue) => (
-                    <li>
-                      {ratingValue.ratingValue.title}
-                      {ratingValue.ratingValue.value}
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </li>
-      </ul>
-    </div>
+    <Grid columns={{ initial: "1", sm: "4" }} gap={"4"}>
+      <Box className="md:col-span-3">
+        <RatingTravelServiceForm travelService={travelService} />
+      </Box>
+      <Box>
+        <Flex direction={"column"} gap={"3"}>
+          {/* <EditTravelServiceButton travelServiceId={travelService.id} />
+          <DeleteTravelServiceButton travelServiceId={travelService.id} />
+          <RatingTravelServiceButton travelServiceId={travelService.id} /> */}
+        </Flex>
+      </Box>
+    </Grid>
   );
+  // <div>
+  //   <RatingItems />
+  //   <ul>
+  //     <li>
+  //       <ul>
+  //         {travelService.ratingTemplate.ratingItems.map((ratingItem) => (
+  //           <li key={ratingItem.id}>
+  //             {ratingItem.ratingItem.title}
+  //             <ul>
+  //               {ratingItem.ratingItem.ratingValues.map((ratingValue) => (
+  //                 <li>
+  //                   {ratingValue.ratingValue.title}
+  //                   {ratingValue.ratingValue.value}
+  //                 </li>
+  //               ))}
+  //             </ul>
+  //           </li>
+  //         ))}
+  //       </ul>
+  //     </li>
+  //   </ul>
+  // </div>
 };
 
 export default NewRatingPage;
