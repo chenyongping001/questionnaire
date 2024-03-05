@@ -101,6 +101,7 @@ model UserRatingOfTravelService {
   travelServiceId Int
   ratingBy        String         @db.VarChar(255)
   ratingAt        DateTime       @default(now())
+  score           Int
   ratingDetails   RatingDetail[]
   remarkDetails   RemarkDetail[]
 }

@@ -52,8 +52,15 @@ const TravelServicesPage = async () => {
                 <Link href={`/travelServices/${travelService.id}`}>
                   {travelService.title}
                 </Link>
-                <div className="block md:hidden text-gray-500 mt-1 text-xs">
-                  {travelService.travelDestination}
+                <div className="block md:hidden text-gray-400 mt-1 text-xs">
+                  起止日期：{travelService.travelStartDate}至
+                  {travelService.travelEndDate}
+                </div>
+                <div className="block md:hidden text-gray-400 text-xs">
+                  服务承接：{travelService.travelAgency}
+                </div>
+                <div className="block md:hidden text-gray-400 text-xs">
+                  疗休养地：{travelService.travelDestination}
                 </div>
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">

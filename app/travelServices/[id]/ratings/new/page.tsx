@@ -1,5 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import { Box, Flex, Grid } from "@radix-ui/themes";
+import { Box } from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { getTravelService } from "../../getTravelService";
@@ -19,41 +19,13 @@ const NewRatingPage = async ({ params }: Props) => {
   if (!travelService) notFound();
 
   return (
-    <Grid columns={{ initial: "1", sm: "4" }} gap={"4"}>
-      <Box className="md:col-span-3">
-        <RatingTravelServiceForm travelService={travelService} />
-      </Box>
-      <Box>
-        <Flex direction={"column"} gap={"3"}>
-          {/* <EditTravelServiceButton travelServiceId={travelService.id} />
-          <DeleteTravelServiceButton travelServiceId={travelService.id} />
-          <RatingTravelServiceButton travelServiceId={travelService.id} /> */}
-        </Flex>
-      </Box>
-    </Grid>
+    <Box>
+      <RatingTravelServiceForm
+        travelService={travelService}
+        ratingUser={`${session?.user?.ygdm}|${session?.user?.ygmc}`}
+      />
+    </Box>
   );
-  // <div>
-  //   <RatingItems />
-  //   <ul>
-  //     <li>
-  //       <ul>
-  //         {travelService.ratingTemplate.ratingItems.map((ratingItem) => (
-  //           <li key={ratingItem.id}>
-  //             {ratingItem.ratingItem.title}
-  //             <ul>
-  //               {ratingItem.ratingItem.ratingValues.map((ratingValue) => (
-  //                 <li>
-  //                   {ratingValue.ratingValue.title}
-  //                   {ratingValue.ratingValue.value}
-  //                 </li>
-  //               ))}
-  //             </ul>
-  //           </li>
-  //         ))}
-  //       </ul>
-  //     </li>
-  //   </ul>
-  // </div>
 };
 
 export default NewRatingPage;

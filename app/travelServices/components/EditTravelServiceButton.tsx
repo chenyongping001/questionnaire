@@ -11,9 +11,7 @@ const EditTravelServiceButton = ({
   return (
     <Button size={"3"}>
       <Pencil2Icon />
-      <Link href={`/travelServices/${travelServiceId}/edit`}>
-        更新疗休养评分表
-      </Link>
+      <Link href={`/travelServices/${travelServiceId}/edit`}>修改疗休养</Link>
     </Button>
   );
 };

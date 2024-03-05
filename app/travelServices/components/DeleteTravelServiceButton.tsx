@@ -1,5 +1,6 @@
 "use client";
 import Spinner from "@/app/components/Spinner";
+import { EraserIcon } from "@radix-ui/react-icons";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -30,11 +31,12 @@ const DeleteTravelServiceButton = ({
       <AlertDialog.Root>
         <AlertDialog.Trigger>
           <Button color="red" disabled={isDeleting} size={"3"}>
-            删除疗休养评分表 {isDeleting && <Spinner />}
+            <EraserIcon />
+            删除疗休养 {isDeleting && <Spinner />}
           </Button>
         </AlertDialog.Trigger>
         <AlertDialog.Content style={{ maxWidth: 450 }}>
-          <AlertDialog.Title>删除疗休养综合评分表</AlertDialog.Title>
+          <AlertDialog.Title>删除疗休养</AlertDialog.Title>
           <AlertDialog.Description size="2">
             删除操作是不能撤消的。您确认要删除这张疗休养评分表吗?
           </AlertDialog.Description>
@@ -47,7 +49,7 @@ const DeleteTravelServiceButton = ({
             </AlertDialog.Cancel>
             <AlertDialog.Action>
               <Button variant="solid" color="red" onClick={deleteTravelService}>
-                删除删除疗休养评分表
+                删除疗休养
               </Button>
             </AlertDialog.Action>
           </Flex>

@@ -34,7 +34,7 @@ export const getTravelService = async (id: string, session: Session) => {
   if (!travelService) return null;
   if (
     session?.user?.role !== "ADMIN" &&
-    !travelService.ratingUsers.includes(session?.user?.ygdm!)
+    !travelService.ratingUsers.includes(`${session?.user?.ygdm!}|${session?.user?.ygmc!}`)
   )
     return null;
   return travelService;

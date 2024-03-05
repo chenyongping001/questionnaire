@@ -5,7 +5,6 @@ import { travelServiceSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TravelService } from "@prisma/client";
 import {
-  Text,
   Box,
   Button,
   Callout,
@@ -15,14 +14,13 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import axios, { AxiosError } from "axios";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import SelectedRatingUsers, { RatingUser } from "./SelectedRatingUsers";
-import { useSession } from "next-auth/react";
 import { formatToRatingUser } from "./formatToRatingUser";
-import { FiDelete } from "react-icons/fi";
 
 interface Props {
   travelService?: TravelService;
