@@ -1,31 +1,23 @@
 "use client";
+import Spinner from "@/app/components/Spinner";
 import { Prisma } from "@prisma/client";
 import {
   AlertDialog,
-  Badge,
   Box,
   Button,
   Callout,
   Card,
   Flex,
-  Heading,
   RadioGroup,
   Separator,
   Text,
   TextArea,
-  TextField,
 } from "@radix-ui/themes";
-import { includeOfTravelService } from "../../getTravelService";
-import Spinner from "@/app/components/Spinner";
-import { useState } from "react";
-import ScoreBadge from "./ScoreBadge";
-import axios, { AxiosError, HttpStatusCode } from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import RatingHeader, { TravelServiceWithIncludes } from "./RatingHeader";
 
-const TravelServiceWithIncludes =
-  Prisma.validator<Prisma.TravelServiceDefaultArgs>()({
-    include: includeOfTravelService,
-  });
 const RatingTravelServiceForm = ({
   travelService,
   ratingUser,
@@ -99,11 +91,12 @@ const RatingTravelServiceForm = ({
         if (res.status === 201) {
           router.push(`/travelServices/${travelService.id}/ratings`);
           router.refresh();
-        }
-        showError(res.data.error);
+        } else showError(res.data.error);
       })
-      .catch((error) => {
-        showError(JSON.stringify(error));
+      .catch((error: AxiosError | any) => {
+        if (axios.isAxiosError(error)) {
+          showError(JSON.stringify(error.message));
+        } else showError("发生了未知错误！");
       });
   };
   return (
@@ -113,24 +106,7 @@ const RatingTravelServiceForm = ({
           <Callout.Text>{errorMsg}</Callout.Text>
         </Callout.Root>
       )}
-      <Heading as="h2">{travelService.title}</Heading>
-      <Flex justify={"between"}>
-        <Box>
-          <Text color="gray" size={"2"} as="p">
-            起止日期：{travelService.travelStartDate}--
-            {travelService.travelEndDate}
-          </Text>
-          <Text color="gray" size={"2"} as="p">
-            服务承接：{travelService.travelAgency}
-          </Text>
-          <Text color="gray" size={"2"} as="p">
-            疗休养地：{travelService.travelDestination}
-          </Text>
-        </Box>
-        <Box>
-          <ScoreBadge score={rateTotal} />
-        </Box>
-      </Flex>
+      <RatingHeader travelService={travelService} score={rateTotal} />
       <Box
         style={{
           background: "var(--gray-a2)",

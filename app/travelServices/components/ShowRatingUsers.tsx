@@ -6,6 +6,7 @@ interface Props {
 }
 
 const ShowRatingUsers = ({ ratingUsers }: Props) => {
+  if (ratingUsers.length === 0) return <Box pl={"3"}>无</Box>;
   return (
     <Grid gap="1" columns="3">
       {ratingUsers.map((user) => (
