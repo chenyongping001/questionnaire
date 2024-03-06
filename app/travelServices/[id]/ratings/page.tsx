@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 import { Flex, Heading, Link, Table } from "@radix-ui/themes";
 import RatingHeader from "./components/RatingHeader";
 import { getUserRatings } from "./getUserRatings";
-import { convertDateToString } from "@/app/utilities/trimTime";
+import { convertDateToString, keep2Dec } from "@/app/utilities/trimTime";
 import ScoreBadge from "./components/ScoreBadge";
 import ShowRatingUsers from "../../components/ShowRatingUsers";
 import { formatToRatingUser } from "../../components/formatToRatingUser";
@@ -29,7 +29,9 @@ const RatingsPage = async ({ params }: Props) => {
 
   const length = userRatings.length;
   const avarageScore = length
-    ? userRatings.reduce((prev, cur) => (prev + cur.score) / length, 0)
+    ? keep2Dec(
+        userRatings.reduce((prev, cur) => (prev + cur.score) / length, 0)
+      )
     : 0;
 
   return (

@@ -3,11 +3,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import { getUserRatings } from "@/app/travelServices/[id]/ratings/getUserRatings";
 
 interface Props {
   params: {
     id: string;
   };
+}
+
+export async function GET(request: NextRequest, { params }: Props) {
+  const session = await getServerSession(authOptions);
+  const userRatings = await getUserRatings(parseInt(params.id), session!);
+  return NextResponse.json(userRatings);
 }
 
 export async function POST(request: NextRequest, { params }: Props) {

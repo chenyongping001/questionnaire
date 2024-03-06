@@ -1,11 +1,11 @@
-import { Button, Table, Text } from "@radix-ui/themes";
+import prisma from "@/prisma/client";
+import { Flex, Table, Text } from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
-import React from "react";
-import prisma from "@/prisma/client";
 import { authOptions } from "../api/auth/[...nextauth]/authOptions";
-import TravelServiceActions from "./components/TravelServiceActions";
 import TravelServiceStatusBadge from "../components/TravelServiceStatusBadge";
+import AvarageScoreBadge from "./[id]/ratings/components/AvarageScoreBadge";
+import TravelServiceActions from "./components/TravelServiceActions";
 
 const TravelServicesPage = async () => {
   const session = await getServerSession(authOptions);
@@ -43,6 +43,9 @@ const TravelServicesPage = async () => {
               结束日期
             </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>状态</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className="hidden md:table-cell">
+              得分
+            </Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -76,7 +79,31 @@ const TravelServicesPage = async () => {
                 {travelService.travelEndDate}
               </Table.Cell>
               <Table.Cell>
-                <TravelServiceStatusBadge status={travelService.status} />
+                <Flex direction="column" gap={"3"}>
+                  <TravelServiceStatusBadge status={travelService.status} />
+                  <div className="block md:hidden text-gray-400 text-xs ">
+                    <Link href={`/travelServices/${travelService.id}/ratings`}>
+                      <div>
+                        <AvarageScoreBadge
+                          travelServiceId={travelService.id}
+                          badgeSize="1"
+                          textSize="2"
+                        />
+                      </div>
+                    </Link>
+                  </div>
+                </Flex>
+              </Table.Cell>
+              <Table.Cell className="hidden md:table-cell">
+                <Link href={`/travelServices/${travelService.id}/ratings`}>
+                  <div>
+                    <AvarageScoreBadge
+                      travelServiceId={travelService.id}
+                      badgeSize="1"
+                      textSize="2"
+                    />
+                  </div>
+                </Link>
               </Table.Cell>
             </Table.Row>
           ))}
