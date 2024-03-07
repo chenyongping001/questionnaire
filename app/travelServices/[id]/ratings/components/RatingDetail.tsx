@@ -1,22 +1,18 @@
 "use client";
-import React from "react";
+import { convertDateToString } from "@/app/utilities/trimTime";
+import { Prisma } from "@prisma/client";
 import {
   Box,
   Card,
   Flex,
-  Grid,
   Heading,
   RadioGroup,
   Separator,
   Text,
   TextArea,
 } from "@radix-ui/themes";
-import RatingHeader, {
-  TravelServiceWithIncludes,
-} from "../components/RatingHeader";
-import { Prisma } from "@prisma/client";
+import { TravelServiceWithIncludes } from "../components/RatingHeader";
 import { includeOfUserRatings } from "../getUserRatings";
-import { convertDateToString } from "@/app/utilities/trimTime";
 import ScoreBadge from "./ScoreBadge";
 
 const UserRatingWithIncludes =
@@ -45,7 +41,7 @@ const RatingDetail = ({ travelService, userRating }: Props) => {
         gap={"3"}
       >
         <ScoreBadge score={userRating.score} />
-        <Box>
+        <Box mr={"3"}>
           <Heading mb="1" size="2">
             {userRating.ratingBy.substring(6)}
           </Heading>

@@ -32,7 +32,7 @@ const RatingHeader = ({ travelService, score }: Props) => {
             疗休养地：{travelService.travelDestination}
           </Text>
         </Box>
-        <Box>
+        <Box mr={"3"}>
           <ScoreBadge score={score} />
         </Box>
       </Flex>
