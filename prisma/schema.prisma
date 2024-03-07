@@ -104,6 +104,8 @@ model UserRatingOfTravelService {
   score           Int
   ratingDetails   RatingDetail[]
   remarkDetails   RemarkDetail[]
+
+  @@unique(fields: [travelServiceId, ratingBy], name: "userRatingTravel")
 }
 
 model RatingDetail {

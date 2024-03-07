@@ -8,11 +8,16 @@ export const includeOfUserRatings = {
             include:{
               ratingItem:true,
               ratingValue:true,
-              }
             }
           },
-        }
-      };
+        },
+      },
+      remarkDetails:{
+        include:{
+          remarkItem:true,
+        },
+      }
+    };
 
 export const getUserRatings = async (travelServiceId: number, session: Session) => {
   const userRatings = await prisma.userRatingOfTravelService.findMany({
@@ -30,4 +35,14 @@ export const getUserRatings = async (travelServiceId: number, session: Session) 
     return null;
   
   return userRatings;
+};
+
+export const getUserRating = async (userRatingId: number) => {
+  const userRating = await prisma.userRatingOfTravelService.findUnique({
+    where:{
+      id:userRatingId
+    },
+    include: includeOfUserRatings,
+  });
+  return userRating;
 };
