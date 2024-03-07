@@ -9,7 +9,7 @@ export default async function Home({ searchParams }: { searchParams: any }) {
   if (code) {
     signIn("credentials", {
       code: code,
-      callbackUrl: "/",
+      callbackUrl: "/travelServices",
     });
   } else {
     redirect(

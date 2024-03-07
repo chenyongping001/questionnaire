@@ -15,5 +15,5 @@ const mainMiddleware: NextMiddleware = async (request) => {
   }
   return res;
 };
-// export default withAuthorization(mainMiddleware, ["/travelServices", "/api/travelServices", "/api/mis"]);
-export default mainMiddleware;
+export default withAuthorization(mainMiddleware, ["/travelServices", "/api/travelServices", "/api/mis"]);
+// export default mainMiddleware;

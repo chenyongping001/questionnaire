@@ -6,6 +6,7 @@ import {
   Card,
   Flex,
   Heading,
+  Link,
   RadioGroup,
   Separator,
   Text,
@@ -30,6 +31,9 @@ interface Props {
 const RatingDetail = ({ travelService, userRating }: Props) => {
   return (
     <Flex direction={"column"} gap={"3"} className="max-w-xl">
+      <Link href={`/travelServices/${travelService.id}/ratings`}>
+        返回评价列表
+      </Link>
       <Heading as="h2">{travelService.title}</Heading>
       <Flex
         align={"center"}

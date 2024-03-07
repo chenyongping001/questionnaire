@@ -1,7 +1,7 @@
 import React from "react";
 import { includeOfTravelService } from "../../getTravelService";
 import { Prisma } from "@prisma/client";
-import { Box, Callout, Heading, Flex, Text } from "@radix-ui/themes";
+import { Box, Callout, Heading, Flex, Text, Link } from "@radix-ui/themes";
 import ScoreBadge from "./ScoreBadge";
 
 export const TravelServiceWithIncludes =
@@ -18,6 +18,7 @@ interface Props {
 const RatingHeader = ({ travelService, score }: Props) => {
   return (
     <>
+      <Link href={`/travelServices/${travelService.id}`}>返回疗休养信息</Link>
       <Heading as="h2">{travelService.title}</Heading>
       <Flex justify={"between"}>
         <Box>
