@@ -1,11 +1,12 @@
 import prisma from "@/prisma/client";
-import { Flex, Table, Text } from "@radix-ui/themes";
-import { getServerSession } from "next-auth";
-import Link from "next/link";
+import { Flex, Heading, Link, Table, Text } from "@radix-ui/themes";
+import { Session, getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/authOptions";
 import TravelServiceStatusBadge from "../components/TravelServiceStatusBadge";
 import AvarageScoreBadge from "./[id]/ratings/components/AvarageScoreBadge";
 import TravelServiceActions from "./components/TravelServiceActions";
+import { Metadata } from "next";
+import { TravelServiceStatus } from "@prisma/client";
 
 const TravelServicesPage = async () => {
   const session = await getServerSession(authOptions);
@@ -13,7 +14,10 @@ const TravelServicesPage = async () => {
 
   const travelServices = await prisma.travelService.findMany({
     where: {
-      ratingUsers: user.role === "ADMIN" ? undefined : { contains: user.ygdm },
+      ratingUsers:
+        user.role === "ADMIN"
+          ? undefined
+          : { contains: `${user.ygdm}|${user.ygmc}` },
     },
     orderBy: {
       createAt: "desc",
@@ -25,7 +29,13 @@ const TravelServicesPage = async () => {
 
   return (
     <div>
-      <TravelServiceActions />
+      {user.role === "ADMIN" && <TravelServiceActions />}
+      {user.role !== "ADMIN" && (
+        <Heading size={"3"} color="gray" className="pb-3">
+          疗休养批次列表
+        </Heading>
+      )}
+
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
@@ -82,28 +92,30 @@ const TravelServicesPage = async () => {
                 <Flex direction="column" gap={"3"}>
                   <TravelServiceStatusBadge status={travelService.status} />
                   <div className="block md:hidden text-gray-400 text-xs ">
-                    <Link href={`/travelServices/${travelService.id}/ratings`}>
-                      <div>
+                    {travelService.status !== TravelServiceStatus.DRAFT && (
+                      <Link
+                        href={`/travelServices/${travelService.id}/ratings`}
+                      >
                         <AvarageScoreBadge
                           travelServiceId={travelService.id}
                           badgeSize="1"
                           textSize="2"
                         />
-                      </div>
-                    </Link>
+                      </Link>
+                    )}
                   </div>
                 </Flex>
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                <Link href={`/travelServices/${travelService.id}/ratings`}>
-                  <div>
+                {travelService.status !== TravelServiceStatus.DRAFT && (
+                  <Link href={`/travelServices/${travelService.id}/ratings`}>
                     <AvarageScoreBadge
                       travelServiceId={travelService.id}
                       badgeSize="1"
                       textSize="2"
                     />
-                  </div>
-                </Link>
+                  </Link>
+                )}
               </Table.Cell>
             </Table.Row>
           ))}
@@ -112,5 +124,9 @@ const TravelServicesPage = async () => {
     </div>
   );
 };
-
+export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "疗休养批次列表",
+  description: "疗休养批次列表",
+};
 export default TravelServicesPage;

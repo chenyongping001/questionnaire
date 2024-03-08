@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { getTravelService } from "../../getTravelService";
 import RatingTravelServiceForm from "../components/RatingTravelServiceForm";
+import { Metadata } from "next";
 
 interface Props {
   params: { id: string };
@@ -26,6 +27,11 @@ const NewRatingPage = async ({ params }: Props) => {
       />
     </Box>
   );
+};
+
+export const metadata: Metadata = {
+  title: "疗休养评分",
+  description: "疗休养评分",
 };
 
 export default NewRatingPage;

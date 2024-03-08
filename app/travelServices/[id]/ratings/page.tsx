@@ -10,6 +10,7 @@ import { convertDateToString, keep2Dec } from "@/app/utilities/trimTime";
 import ScoreBadge from "./components/ScoreBadge";
 import ShowRatingUsers from "../../components/ShowRatingUsers";
 import { formatToRatingUser } from "../../components/formatToRatingUser";
+import { Metadata } from "next";
 
 interface Props {
   params: { id: string };
@@ -25,7 +26,7 @@ const RatingsPage = async ({ params }: Props) => {
   if (!travelService) notFound();
 
   const userRatings = await getUserRatings(travelService.id, session!);
-  if (!userRatings) notFound();
+  if (!userRatings) return <p>请您先评分！</p>;
 
   const length = userRatings.length;
   const avarageScore = length
@@ -90,4 +91,9 @@ const RatingsPage = async ({ params }: Props) => {
   );
 };
 
+export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "评分情况列表",
+  description: "疗休养参与者评分情况列表",
+};
 export default RatingsPage;

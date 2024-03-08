@@ -18,7 +18,7 @@ const NavBar = () => {
     { href: "/travelServices", label: "疗休养批次" },
   ];
   return (
-    <nav className="flex space-x-6 mb-5 px-5 border-b items-center h-14">
+    <nav className="flex space-x-6 px-5 border-b items-center h-14">
       <Container>
         <Flex justify={"between"}>
           <Flex align={"center"} gap={"3"}>

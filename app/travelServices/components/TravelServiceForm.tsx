@@ -110,7 +110,7 @@ const TravelServiceForm = ({ travelService }: Props) => {
       <form className="space-y-8 pb-8" onSubmit={onSubmit}>
         <Flex direction={"column"} gap={"3"}>
           <Heading size={"5"} className="pb-5">
-            疗休养服务综合评分表
+            疗休养信息
           </Heading>
 
           {textFields.map((field) => (
@@ -156,7 +156,7 @@ const TravelServiceForm = ({ travelService }: Props) => {
           //   type="submit"
           disabled={isSubmitting}
         >
-          {travelService ? "更新疗休养评分表" : "生成疗休养评分表"}
+          {travelService ? "修改疗休养" : "添加疗休养"}
           {isSubmitting && <Spinner />}
         </Button>
       </form>

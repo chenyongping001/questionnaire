@@ -1,7 +1,5 @@
 import { Flex, Link } from "@radix-ui/themes";
-import React from "react";
 import AvarageScoreBadge from "../[id]/ratings/components/AvarageScoreBadge";
-import ScoreBadge from "../[id]/ratings/components/ScoreBadge";
 
 interface Props {
   travelServiceId: number;

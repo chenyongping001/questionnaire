@@ -6,6 +6,7 @@ import { getTravelService } from "../../getTravelService";
 import RatingHeader from "../components/RatingHeader";
 import { getUserRating } from "../getUserRatings";
 import RatingDetail from "../components/RatingDetail";
+import { Metadata } from "next";
 
 interface Props {
   params: {
@@ -24,4 +25,8 @@ const RatingDetailPage = async ({ params }: Props) => {
   return <RatingDetail travelService={travelService} userRating={userRating} />;
 };
 
+export const metadata: Metadata = {
+  title: "评分详细查看",
+  description: "评分详细查看",
+};
 export default RatingDetailPage;

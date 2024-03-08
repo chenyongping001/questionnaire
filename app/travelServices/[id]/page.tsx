@@ -9,6 +9,8 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import RatingTravelServiceButton from "../components/RatingTravelServiceButton";
 import StatusSwitch from "../components/StatusSwitch";
 import RatingsLink from "../components/RatingsLink";
+import { Metadata } from "next";
+import { TravelServiceStatus } from "@prisma/client";
 
 interface Props {
   params: { id: string };
@@ -26,17 +28,35 @@ const TravelServiceDetailPage = async ({ params }: Props) => {
       </Box>
       <Box>
         <Flex direction={"column"} gap={"3"}>
-          <Card>
-            <Grid columns={"1"} gap={"3"}>
-              <EditTravelServiceButton travelServiceId={travelService.id} />
-              <DeleteTravelServiceButton travelServiceId={travelService.id} />
-            </Grid>
-          </Card>
-          <Card>
+          {session?.user?.role === "ADMIN" &&
+            travelService.status === TravelServiceStatus.DRAFT && (
+              <Card variant="ghost">
+                <Grid columns={"1"} gap={"3"}>
+                  <EditTravelServiceButton travelServiceId={travelService.id} />
+                  <DeleteTravelServiceButton
+                    travelServiceId={travelService.id}
+                  />
+                </Grid>
+              </Card>
+            )}
+
+          <Card variant="ghost">
             <Grid columns={"1"} gap={"3"} mb={"3"}>
-              <StatusSwitch />
-              <RatingsLink travelServiceId={travelService.id} />
-              <RatingTravelServiceButton travelServiceId={travelService.id} />
+              {session?.user?.role === "ADMIN" && (
+                <StatusSwitch travelService={travelService} />
+              )}
+              {travelService.status !== TravelServiceStatus.DRAFT && (
+                <RatingsLink travelServiceId={travelService.id} />
+              )}
+              {travelService.status === TravelServiceStatus.RATING &&
+                travelService.ratingUsers.includes(
+                  `${session?.user?.ygdm!}|${session?.user?.ygmc!}`
+                ) && (
+                  <RatingTravelServiceButton
+                    travelServiceId={travelService.id}
+                    session={session!}
+                  />
+                )}
             </Grid>
           </Card>
         </Flex>
@@ -45,4 +65,8 @@ const TravelServiceDetailPage = async ({ params }: Props) => {
   );
 };
 
+export const metadata: Metadata = {
+  title: "疗休养信息查看",
+  description: "疗休养信息查看",
+};
 export default TravelServiceDetailPage;

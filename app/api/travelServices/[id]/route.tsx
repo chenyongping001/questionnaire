@@ -13,6 +13,8 @@ interface Props {
 
 export async function PATCH(request: NextRequest, { params }: Props) {
   const session = await getServerSession(authOptions);
+  if (session?.user?.role !== "ADMIN")
+    return NextResponse.json({}, { status: 401 });
   const travelService = await getTravelService(params.id, session!);
   if (!travelService)
     return NextResponse.json({ error: "不正确的疗休养单" }, { status: 404 });
@@ -36,6 +38,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
+  if (session?.user?.role !== "ADMIN")
+    return NextResponse.json({}, { status: 401 });
   const travelService = await getTravelService(params.id, session!);
   if (!travelService)
     return NextResponse.json({ error: "不正确的疗休养单" }, { status: 404 });
