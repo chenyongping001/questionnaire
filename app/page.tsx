@@ -1,6 +1,4 @@
-import { Button } from "@radix-ui/themes";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/authOptions";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
@@ -16,3 +14,7 @@ export default async function Home() {
   // );
   return redirect("/travelServices");
 }
+export const metadata: Metadata = {
+  title: "首页",
+  description: "首页",
+};

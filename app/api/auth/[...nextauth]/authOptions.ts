@@ -16,13 +16,13 @@ export const authOptions: NextAuthOptions = {
         const code = credentials?.code;
         if (!code || code.length !== 43) return null;
 
-        console.log("微信返回了code");
+        // console.log("微信返回了code");
         const access_token = await axios
           .get(
             " https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=ww9c07d84e2ca4943b&corpsecret=rBpKbYTQuzGCkoO_B04AUfJAo7Sf9iDJ6iXRShSIdJI"
           )
           .then((res) => res.data["access_token"]);
-        console.log(access_token);
+        // console.log(access_token);
 
         const userInfo = await axios
           .get(
@@ -30,7 +30,7 @@ export const authOptions: NextAuthOptions = {
           )
           .then((res) => res.data);
 
-        console.log(userInfo);
+        // console.log(userInfo);
         if(userInfo['errcode']!==0) return null;
         const userid = userInfo['userid'];
         const fetchedEmployees:{ygdm:string;ygmc:string}[] = await fetchOriginEmployees(userid);
