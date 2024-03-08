@@ -2,6 +2,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
 import admins from "./admins";
 import axios from "axios";
+import { env } from "process";
 import { fetchOriginEmployees } from "../../mis/employees/fetchEmployees";
 
 export const authOptions: NextAuthOptions = {
@@ -19,7 +20,7 @@ export const authOptions: NextAuthOptions = {
         // console.log("微信返回了code");
         const access_token = await axios
           .get(
-            " https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=ww9c07d84e2ca4943b&corpsecret=rBpKbYTQuzGCkoO_B04AUfJAo7Sf9iDJ6iXRShSIdJI"
+            `https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=${env.WX_APPID}&corpsecret=${env.WX_CORPSECRET}`
           )
           .then((res) => res.data["access_token"]);
         // console.log(access_token);
