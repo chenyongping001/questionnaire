@@ -3,10 +3,10 @@ import { Badge, Text } from "@radix-ui/themes";
 interface Props {
   score: number;
   badgeSize?: "1" | "2";
-  textSize?: "1" | "3" | "2" | "7";
+  textSize?: "1" | "3" | "2" | "6";
 }
 
-const ScoreBadge = ({ score, badgeSize = "2", textSize = "7" }: Props) => {
+const ScoreBadge = ({ score, badgeSize = "2", textSize = "6" }: Props) => {
   return (
     <Badge
       radius="full"

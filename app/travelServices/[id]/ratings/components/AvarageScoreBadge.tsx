@@ -7,7 +7,7 @@ import ScoreBadge from "./ScoreBadge";
 interface Props {
   travelServiceId: number;
   badgeSize?: "1" | "2";
-  textSize?: "1" | "3" | "2" | "7";
+  textSize?: "1" | "3" | "2" | "6";
 }
 
 const AvarageScoreBadge = ({ travelServiceId, badgeSize, textSize }: Props) => {
