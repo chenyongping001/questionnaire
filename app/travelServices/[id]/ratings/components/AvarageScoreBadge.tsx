@@ -30,7 +30,7 @@ const AvarageScoreBadge = ({ travelServiceId, badgeSize, textSize }: Props) => {
   const length = userRatings?.length;
   if (!length) return;
   const avarageScore = keep2Dec(
-    userRatings.reduce((prev, cur) => (prev + cur.score) / length, 0)
+    userRatings.reduce((prev, cur) => prev + cur.score, 0) / length
   );
 
   return (

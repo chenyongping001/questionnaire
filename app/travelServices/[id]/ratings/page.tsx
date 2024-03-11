@@ -30,9 +30,7 @@ const RatingsPage = async ({ params }: Props) => {
 
   const length = userRatings.length;
   const avarageScore = length
-    ? keep2Dec(
-        userRatings.reduce((prev, cur) => (prev + cur.score) / length, 0)
-      )
+    ? keep2Dec(userRatings.reduce((prev, cur) => prev + cur.score, 0) / length)
     : 0;
 
   return (
