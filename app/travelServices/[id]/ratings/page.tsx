@@ -70,7 +70,6 @@ const RatingsPage = async ({ params }: Props) => {
                 >
                   <Text as="p">{userRating.ratingBy.split("|")[1]}</Text>
                   <div className="block md:hidden text-gray-400 mt-1 text-xs">
-                    意见：
                     <ul>
                       {userRating.remarkDetails.map((remarkDetail) => (
                         <li key={remarkDetail.id}>
