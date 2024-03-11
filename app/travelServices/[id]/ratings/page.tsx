@@ -3,7 +3,7 @@ import { getTravelService } from "../getTravelService";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
-import { Flex, Heading, Link, Table } from "@radix-ui/themes";
+import { Flex, Heading, Link, Table, Text } from "@radix-ui/themes";
 import RatingHeader from "./components/RatingHeader";
 import { getUserRatings } from "./getUserRatings";
 import { convertDateToString, keep2Dec } from "@/app/utilities/trimTime";
@@ -33,6 +33,15 @@ const RatingsPage = async ({ params }: Props) => {
     ? keep2Dec(userRatings.reduce((prev, cur) => prev + cur.score, 0) / length)
     : 0;
 
+  const showUserRatings =
+    session?.user?.role === "ADMIN"
+      ? userRatings
+      : userRatings.filter(
+          (userRating) =>
+            userRating.ratingBy ===
+            `${session?.user?.ygdm}|${session?.user?.ygmc}`
+        );
+
   return (
     <Flex direction={"column"} gap={"3"} className="max-w-xl">
       <RatingHeader travelService={travelService} score={avarageScore} />
@@ -43,23 +52,49 @@ const RatingsPage = async ({ params }: Props) => {
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeaderCell>评价人</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>评价时间</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className="hidden md:table-cell">
+              评价时间
+            </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className="hidden md:table-cell">
+              意见
+            </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>分数</Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {userRatings.map((userRating) => (
+          {showUserRatings.map((userRating) => (
             <Table.Row key={userRating.id}>
               <Table.Cell>
                 <Link
                   href={`/travelServices/${userRating.travelServiceId}/ratings/${userRating.id}`}
                 >
-                  {userRating.ratingBy.split("|")[1]}
+                  <Text as="p">{userRating.ratingBy.split("|")[1]}</Text>
+                  <div className="block md:hidden text-gray-400 mt-1 text-xs">
+                    意见：
+                    <ul>
+                      {userRating.remarkDetails.map((remarkDetail) => (
+                        <li key={remarkDetail.id}>
+                          {remarkDetail.remarkContent}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="block md:hidden text-gray-400 text-xs">
+                    评价时间：{convertDateToString(userRating.ratingAt)}
+                  </div>
                 </Link>
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell className="hidden md:table-cell">
                 {convertDateToString(userRating.ratingAt)}
               </Table.Cell>
+              <Table.Cell className="hidden md:table-cell">
+                <ul>
+                  {userRating.remarkDetails.map((remarkDetail) => (
+                    <li key={remarkDetail.id}>{remarkDetail.remarkContent}</li>
+                  ))}
+                </ul>
+              </Table.Cell>
+
               <Table.Cell>
                 <ScoreBadge
                   score={userRating.score}
