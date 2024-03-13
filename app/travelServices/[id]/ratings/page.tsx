@@ -94,7 +94,7 @@ const RatingsPage = async ({ params }: Props) => {
                 </ul>
               </Table.Cell>
 
-              <Table.Cell justify="center">
+              <Table.Cell>
                 <ScoreBadge
                   score={userRating.score}
                   badgeSize="1"
