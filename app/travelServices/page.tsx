@@ -60,7 +60,7 @@ const TravelServicesPage = async () => {
         </Table.Header>
         <Table.Body>
           {travelServices.map((travelService) => (
-            <Table.Row key={travelService.id}>
+            <Table.Row key={travelService.id} align={"center"}>
               <Table.Cell>
                 <Link href={`/travelServices/${travelService.id}`}>
                   <Text as="p">{travelService.title}</Text>
@@ -88,8 +88,8 @@ const TravelServicesPage = async () => {
               <Table.Cell className="hidden md:table-cell">
                 {travelService.travelEndDate}
               </Table.Cell>
-              <Table.Cell align="center">
-                <Flex direction="column" gap={"2"} align={"center"}>
+              <Table.Cell justify={"center"}>
+                <Flex direction="column" gap={"2"}>
                   <TravelServiceStatusBadge status={travelService.status} />
                   <div className="block md:hidden text-gray-400 text-xs ">
                     {travelService.status !== TravelServiceStatus.DRAFT && (

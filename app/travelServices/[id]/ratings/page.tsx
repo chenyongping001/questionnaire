@@ -63,7 +63,7 @@ const RatingsPage = async ({ params }: Props) => {
         </Table.Header>
         <Table.Body>
           {showUserRatings.map((userRating) => (
-            <Table.Row key={userRating.id}>
+            <Table.Row key={userRating.id} align={"center"}>
               <Table.Cell>
                 <Link
                   href={`/travelServices/${userRating.travelServiceId}/ratings/${userRating.id}`}
@@ -94,7 +94,7 @@ const RatingsPage = async ({ params }: Props) => {
                 </ul>
               </Table.Cell>
 
-              <Table.Cell align="center">
+              <Table.Cell justify="center">
                 <ScoreBadge
                   score={userRating.score}
                   badgeSize="1"
