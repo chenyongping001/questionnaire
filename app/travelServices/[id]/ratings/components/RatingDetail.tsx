@@ -16,7 +16,7 @@ import { TravelServiceWithIncludes } from "../components/RatingHeader";
 import { includeOfUserRatings } from "../getUserRatings";
 import ScoreBadge from "./ScoreBadge";
 
-const UserRatingWithIncludes =
+export const UserRatingWithIncludes =
   Prisma.validator<Prisma.UserRatingOfTravelServiceDefaultArgs>()({
     include: includeOfUserRatings,
   });

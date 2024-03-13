@@ -1,6 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
-import admins from "./admins";
 import axios from "axios";
 import { env } from "process";
 import { fetchOriginEmployees } from "../../mis/employees/fetchEmployees";
@@ -32,12 +31,12 @@ export const authOptions: NextAuthOptions = {
           .then((res) => res.data);
 
         // console.log(userInfo);
-        if(userInfo['errcode']!==0) return null;
+        if (userInfo['errcode'] !== 0) return null;
         const userid = userInfo['userid'];
-        const fetchedEmployees:{ygdm:string;ygmc:string}[] = await fetchOriginEmployees(userid);
-        const username = fetchedEmployees.find(employee=>employee.ygdm === userid)?.ygmc;
-
-        return {ygdm:userid, ygmc:username, role:admins.includes(userid)?'ADMIN':'WXUSER'}
+        const fetchedEmployees: { ygdm: string; ygmc: string }[] = await fetchOriginEmployees(userid);
+        const username = fetchedEmployees.find(employee => employee.ygdm === userid)?.ygmc;
+        const admins = env.ADMINS!;
+        return { ygdm: userid, ygmc: username, role: admins.includes(userid) ? 'ADMIN' : 'WXUSER' }
 
 
       },

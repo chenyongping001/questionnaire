@@ -1,12 +1,10 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import { Box, Card, Flex, RadioGroup, Separator, Text } from "@radix-ui/themes";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { getTravelService } from "../../getTravelService";
-import RatingHeader from "../components/RatingHeader";
-import { getUserRating } from "../getUserRatings";
 import RatingDetail from "../components/RatingDetail";
-import { Metadata } from "next";
+import { getUserRating } from "../getUserRatings";
 
 interface Props {
   params: {

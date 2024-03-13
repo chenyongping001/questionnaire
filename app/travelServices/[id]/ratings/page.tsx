@@ -69,7 +69,7 @@ const RatingsPage = async ({ params }: Props) => {
                   href={`/travelServices/${userRating.travelServiceId}/ratings/${userRating.id}`}
                 >
                   <Text as="p">{userRating.ratingBy.split("|")[1]}</Text>
-                  <div className="block md:hidden text-gray-400 mt-1 text-xs">
+                  <div className="block md:hidden text-gray-800 mt-1 text-sm">
                     <ul>
                       {userRating.remarkDetails.map((remarkDetail) => (
                         <li key={remarkDetail.id}>
@@ -79,7 +79,7 @@ const RatingsPage = async ({ params }: Props) => {
                     </ul>
                   </div>
                   <div className="block md:hidden text-gray-400 text-xs">
-                    评价时间：{convertDateToString(userRating.ratingAt)}
+                    {convertDateToString(userRating.ratingAt)}
                   </div>
                 </Link>
               </Table.Cell>
