@@ -11,7 +11,7 @@ const SignIn = ({ code }: Props) => {
       code: code,
       callbackUrl: "/travelServices",
     });
-  }, []);
+  }, [code]);
 
   return <div>身份认证中...</div>;
 };
