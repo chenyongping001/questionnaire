@@ -88,8 +88,8 @@ const TravelServicesPage = async () => {
               <Table.Cell className="hidden md:table-cell">
                 {travelService.travelEndDate}
               </Table.Cell>
-              <Table.Cell>
-                <Flex direction="column" gap={"3"}>
+              <Table.Cell align="center">
+                <Flex direction="column" gap={"2"}>
                   <TravelServiceStatusBadge status={travelService.status} />
                   <div className="block md:hidden text-gray-400 text-xs ">
                     {travelService.status !== TravelServiceStatus.DRAFT && (
