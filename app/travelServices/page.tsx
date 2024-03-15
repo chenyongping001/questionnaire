@@ -90,7 +90,9 @@ const TravelServicesPage = async () => {
               </Table.Cell>
               <Table.Cell>
                 <Flex direction="column" gap={"2"}>
-                  <TravelServiceStatusBadge status={travelService.status} />
+                  <div>
+                    <TravelServiceStatusBadge status={travelService.status} />
+                  </div>
                   <div className="block md:hidden text-gray-400 text-xs ">
                     {travelService.status !== TravelServiceStatus.DRAFT && (
                       <Link
