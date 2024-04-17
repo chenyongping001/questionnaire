@@ -4,10 +4,10 @@ import { Metadata } from "next";
 import { env } from "process";
 
 export default async function Home({ searchParams }: { searchParams: any }) {
+  const client = searchParams["client"];
   const code = searchParams["code"];
-  if (code) {
-    return <SignIn code={code} />;
-  } else {
+  // console.log(client, code);
+  if (client === "wxwork" && !code) {
     redirect(
       `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${
         env.WX_APPID
@@ -18,6 +18,7 @@ export default async function Home({ searchParams }: { searchParams: any }) {
       }#wechat_redirect`
     );
   }
+  return <SignIn code={code} />;
 }
 export const metadata: Metadata = {
   title: "验证用户...",

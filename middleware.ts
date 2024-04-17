@@ -1,17 +1,13 @@
-import { getToken } from "next-auth/jwt";
-import { NextMiddleware, NextResponse } from "next/server";
+import { NextMiddleware, NextResponse, userAgent } from "next/server";
 import withAuthorization from "./middlewares/withAuthorization";
 const mainMiddleware: NextMiddleware = async (request) => {
   const res = NextResponse.next();
-  if (request.nextUrl.pathname === '/') {
-      const token = await getToken({
-        req: request,
-        secret: process.env.NEXTAUTH_SECRET,
-      });
-      if (!token) {
-        const url = new URL("/wxworkAuthentication", request.url);
-        return NextResponse.redirect(url);
-      }
+  if (request.nextUrl.pathname === '/wxworkAuthentication') {
+    const url = request.nextUrl
+    const { ua } = userAgent(request)
+    if (/wxwork/i.test(JSON.stringify(ua)))
+      url.searchParams.set('client', 'wxwork');
+    return NextResponse.rewrite(url);
   }
   return res;
 };
