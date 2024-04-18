@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { getTravelService } from "../getTravelService";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import { notFound } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { Flex, Heading, Link, Table, Text } from "@radix-ui/themes";
-import RatingHeader from "./components/RatingHeader";
-import { getUserRatings } from "./getUserRatings";
 import { convertDateToString, keep2Dec } from "@/app/utilities/trimTime";
-import ScoreBadge from "./components/ScoreBadge";
+import { Flex, Heading, Link, Table, Text } from "@radix-ui/themes";
+import { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { notFound } from "next/navigation";
+import ExportExcelLink from "../../components/ExportExcelLink";
 import ShowRatingUsers from "../../components/ShowRatingUsers";
 import { formatToRatingUser } from "../../components/formatToRatingUser";
-import { Metadata } from "next";
+import { getTravelService } from "../getTravelService";
+import RatingHeader from "./components/RatingHeader";
+import ScoreBadge from "./components/ScoreBadge";
+import { getUserRatings } from "./getUserRatings";
 
 interface Props {
   params: { id: string };
@@ -42,12 +42,32 @@ const RatingsPage = async ({ params }: Props) => {
             `${session?.user?.ygdm}|${session?.user?.ygmc}`
         );
 
+  const columns = [
+    { key: "ratingBy", header: "评价人", width: 10 },
+    { key: "ratingAt", header: "评价时间", width: 20 },
+    { key: "remarkDetails", header: "意见", width: 50 },
+    { key: "score", header: "分数", width: 10 },
+  ];
+  const rows = showUserRatings.map((userRating) => ({
+    id: userRating.id,
+    travelServiceId: userRating.travelServiceId,
+    ratingBy: userRating.ratingBy.split("|")[1],
+    ratingAt: convertDateToString(userRating.ratingAt),
+    remarkDetails: userRating.remarkDetails
+      .map((detail) => detail.remarkContent)
+      .join(";"),
+    score: userRating.score,
+  }));
+
   return (
     <Flex direction={"column"} gap={"3"} className="max-w-xl">
       <RatingHeader travelService={travelService} score={avarageScore} />
-      <Heading size={"3"} color="gray" className="pt-3 px-3">
-        用户评价详情
-      </Heading>
+      <Flex align={"end"} justify={"between"}>
+        <Heading size={"3"} color="gray" className="pt-3 px-3">
+          用户评价详情
+        </Heading>
+        <ExportExcelLink headers={columns} rows={rows} />
+      </Flex>
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
@@ -62,44 +82,30 @@ const RatingsPage = async ({ params }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {showUserRatings.map((userRating) => (
-            <Table.Row key={userRating.id} align={"center"}>
+          {rows.map((row) => (
+            <Table.Row key={row.id} align={"center"}>
               <Table.Cell>
                 <Link
-                  href={`/travelServices/${userRating.travelServiceId}/ratings/${userRating.id}`}
+                  href={`/travelServices/${row.travelServiceId}/ratings/${row.id}`}
                 >
-                  <Text as="p">{userRating.ratingBy.split("|")[1]}</Text>
+                  <Text as="p">{row.ratingBy}</Text>
                   <div className="block md:hidden text-gray-800 mt-1 text-sm">
-                    <ul>
-                      {userRating.remarkDetails.map((remarkDetail) => (
-                        <li key={remarkDetail.id}>
-                          {remarkDetail.remarkContent}
-                        </li>
-                      ))}
-                    </ul>
+                    {row.remarkDetails}
                   </div>
                   <div className="block md:hidden text-gray-400 text-xs">
-                    {convertDateToString(userRating.ratingAt)}
+                    {row.ratingAt}
                   </div>
                 </Link>
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {convertDateToString(userRating.ratingAt)}
+                {row.ratingAt}
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                <ul>
-                  {userRating.remarkDetails.map((remarkDetail) => (
-                    <li key={remarkDetail.id}>{remarkDetail.remarkContent}</li>
-                  ))}
-                </ul>
+                {row.remarkDetails}
               </Table.Cell>
 
               <Table.Cell>
-                <ScoreBadge
-                  score={userRating.score}
-                  badgeSize="1"
-                  textSize="2"
-                />
+                <ScoreBadge score={row.score} badgeSize="1" textSize="2" />
               </Table.Cell>
             </Table.Row>
           ))}

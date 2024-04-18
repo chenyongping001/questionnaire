@@ -8,6 +8,7 @@ import TravelServiceStatusBadge from "../components/TravelServiceStatusBadge";
 import AvarageScoreBadge from "./[id]/ratings/components/AvarageScoreBadge";
 import ExportExcelLink from "./components/ExportExcelLink";
 import TravelServiceActions from "./components/TravelServiceActions";
+import { convertDateToString } from "../utilities/trimTime";
 
 const TravelServicesPage = async () => {
   const session = await getServerSession(authOptions);
@@ -28,15 +29,34 @@ const TravelServicesPage = async () => {
     },
   });
 
-  const travelServiceColumns = [
+  const columns = [
     { key: "id", header: "序号", width: 10 },
-    { key: "title", header: "标题", width: 50 },
+    { key: "title", header: "标题", width: 30 },
     { key: "travelAgency", header: "旅行社", width: 20 },
     { key: "travelDestination", header: "地点", width: 20 },
     { key: "travelStartDate", header: "开始日期", width: 15 },
     { key: "travelEndDate", header: "结束日期", width: 15 },
-    { key: "ratingUsers", header: "参团人员", width: 100 },
+    { key: "createBy", header: "创建人", width: 15 },
+    { key: "createAt", header: "创建时间", width: 20 },
+    { key: "ratingUsers", header: "参团人员", width: 50 },
+    { key: "description", header: "说明", width: 50 },
   ];
+
+  const rows = travelServices.map((travel) => ({
+    id: travel.id,
+    title: travel.title,
+    travelAgency: travel.travelAgency,
+    travelDestination: travel.travelDestination,
+    travelStartDate: travel.travelStartDate,
+    travelEndDate: travel.travelEndDate,
+    createBy: travel.createBy.split("|")[1],
+    createAt: convertDateToString(travel.createAt),
+    ratingUsers: travel.ratingUsers
+      .split(",")
+      .map((user) => user.split("|")[1])
+      .join(","),
+    description: travel.description,
+  }));
 
   return (
     <div>
@@ -47,7 +67,7 @@ const TravelServicesPage = async () => {
             疗休养批次列表
           </Heading>
         )}
-        <ExportExcelLink headers={travelServiceColumns} rows={travelServices} />
+        <ExportExcelLink headers={columns} rows={rows} />
       </Flex>
       <Table.Root variant="surface">
         <Table.Header>

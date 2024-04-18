@@ -1,7 +1,6 @@
 "use client";
 import { Header, saveToExcel } from "@/app/actions";
 import { Link } from "@radix-ui/themes";
-import { useState } from "react";
 
 interface Props {
   headers: Header[];
@@ -9,7 +8,6 @@ interface Props {
 }
 
 const ExportExcelLink = ({ headers, rows }: Props) => {
-  const [exportPath, setExportPath] = useState("");
   return (
     <Link
       size={"2"}
