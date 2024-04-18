@@ -4,7 +4,7 @@ import React from "react";
 
 const WorkerActions = () => {
   return (
-    <div className="mb-5">
+    <div className="mb-3">
       <Button>
         <Link href="/travelServices/new">添加疗休养批次</Link>
       </Button>

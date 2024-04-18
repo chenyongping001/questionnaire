@@ -9,6 +9,11 @@ const mainMiddleware: NextMiddleware = async (request) => {
       url.searchParams.set('client', 'wxwork');
     return NextResponse.rewrite(url);
   }
+  if (request.nextUrl.pathname.startsWith('/uploads/')) {
+    const url = request.nextUrl;
+    url.pathname = '/api' + url.pathname;
+    return NextResponse.rewrite(url);
+  }
   return res;
 };
 export default withAuthorization(mainMiddleware, ["/travelServices", "/api/travelServices", "/api/mis"]);

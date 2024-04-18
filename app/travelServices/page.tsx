@@ -1,12 +1,13 @@
 import prisma from "@/prisma/client";
+import { TravelServiceStatus } from "@prisma/client";
 import { Flex, Heading, Link, Table, Text } from "@radix-ui/themes";
-import { Session, getServerSession } from "next-auth";
+import { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/authOptions";
 import TravelServiceStatusBadge from "../components/TravelServiceStatusBadge";
 import AvarageScoreBadge from "./[id]/ratings/components/AvarageScoreBadge";
+import ExportExcelLink from "./components/ExportExcelLink";
 import TravelServiceActions from "./components/TravelServiceActions";
-import { Metadata } from "next";
-import { TravelServiceStatus } from "@prisma/client";
 
 const TravelServicesPage = async () => {
   const session = await getServerSession(authOptions);
@@ -27,15 +28,27 @@ const TravelServicesPage = async () => {
     },
   });
 
+  const travelServiceColumns = [
+    { key: "id", header: "序号", width: 10 },
+    { key: "title", header: "标题", width: 50 },
+    { key: "travelAgency", header: "旅行社", width: 20 },
+    { key: "travelDestination", header: "地点", width: 20 },
+    { key: "travelStartDate", header: "开始日期", width: 15 },
+    { key: "travelEndDate", header: "结束日期", width: 15 },
+    { key: "ratingUsers", header: "参团人员", width: 100 },
+  ];
+
   return (
     <div>
-      {user.role === "ADMIN" && <TravelServiceActions />}
-      {user.role !== "ADMIN" && (
-        <Heading size={"3"} color="gray" className="pb-3">
-          疗休养批次列表
-        </Heading>
-      )}
-
+      <Flex align={"end"} justify={"between"} mb={"2"}>
+        {user.role === "ADMIN" && <TravelServiceActions />}
+        {user.role !== "ADMIN" && (
+          <Heading size={"3"} color="gray">
+            疗休养批次列表
+          </Heading>
+        )}
+        <ExportExcelLink headers={travelServiceColumns} rows={travelServices} />
+      </Flex>
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
