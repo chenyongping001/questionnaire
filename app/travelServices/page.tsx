@@ -43,19 +43,13 @@ const TravelServicesPage = async () => {
   ];
 
   const rows = travelServices.map((travel) => ({
-    id: travel.id,
-    title: travel.title,
-    travelAgency: travel.travelAgency,
-    travelDestination: travel.travelDestination,
-    travelStartDate: travel.travelStartDate,
-    travelEndDate: travel.travelEndDate,
+    ...travel,
     createBy: travel.createBy.split("|")[1],
     createAt: convertDateToString(travel.createAt),
     ratingUsers: travel.ratingUsers
       .split(",")
       .map((user) => user.split("|")[1])
       .join(","),
-    description: travel.description,
   }));
 
   return (
@@ -67,7 +61,7 @@ const TravelServicesPage = async () => {
             疗休养批次列表
           </Heading>
         )}
-        <ExportExcelLink headers={columns} rows={rows} />
+        {rows.length > 0 && <ExportExcelLink headers={columns} rows={rows} />}
       </Flex>
       <Table.Root variant="surface">
         <Table.Header>

@@ -49,14 +49,12 @@ const RatingsPage = async ({ params }: Props) => {
     { key: "score", header: "分数", width: 10 },
   ];
   const rows = showUserRatings.map((userRating) => ({
-    id: userRating.id,
-    travelServiceId: userRating.travelServiceId,
+    ...userRating,
     ratingBy: userRating.ratingBy.split("|")[1],
     ratingAt: convertDateToString(userRating.ratingAt),
     remarkDetails: userRating.remarkDetails
       .map((detail) => detail.remarkContent)
       .join(";"),
-    score: userRating.score,
   }));
 
   return (
@@ -66,7 +64,7 @@ const RatingsPage = async ({ params }: Props) => {
         <Heading size={"3"} color="gray" className="pt-3 px-3">
           用户评价详情
         </Heading>
-        <ExportExcelLink headers={columns} rows={rows} />
+        {rows.length > 0 && <ExportExcelLink headers={columns} rows={rows} />}
       </Flex>
       <Table.Root variant="surface">
         <Table.Header>

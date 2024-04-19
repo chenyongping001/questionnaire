@@ -13,7 +13,7 @@ export async function saveToExcel(headers: Header[], rows: unknown[]) {
     } = process.env;
 
     const workbook = new Excel.Workbook();
-    const worksheet = workbook.addWorksheet("sheet1");
+    const worksheet = workbook.addWorksheet("Sheet1");
     worksheet.columns = headers;
     rows.forEach((item) => {
         worksheet.addRow(item);
