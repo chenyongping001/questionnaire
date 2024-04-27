@@ -124,3 +124,9 @@ model RemarkDetail {
   remarkItemId                Int // relation scalar field (used in the `@relation` attribute above)
   remarkContent               String                    @db.Text
 }
+
+model Mis_V_CYP_YGSJ {
+  ygdm String  @unique @db.VarChar(15)
+  ygmc String  @db.VarChar(15)
+  sjhm String? @db.VarChar(15)
+}
