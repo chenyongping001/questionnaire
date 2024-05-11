@@ -5,6 +5,8 @@ const mainMiddleware: NextMiddleware = async (request) => {
   if (request.nextUrl.pathname === '/wxworkAuthentication') {
     const url = request.nextUrl
     const { ua } = userAgent(request)
+    if (/micromessenger/i.test(JSON.stringify(ua)))
+      url.searchParams.set('client', 'micromessenger');
     if (/wxwork/i.test(JSON.stringify(ua)))
       url.searchParams.set('client', 'wxwork');
     return NextResponse.rewrite(url);

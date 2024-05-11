@@ -7,7 +7,7 @@ export default async function Home({ searchParams }: { searchParams: any }) {
   const client = searchParams["client"];
   const code = searchParams["code"];
   // console.log(client, code);
-  if (client === "wxwork" && !code) {
+  if ("wxwork,micromessenger".includes(client) && !code) {
     redirect(
       `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${
         env.WX_APPID
