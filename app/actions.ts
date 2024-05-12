@@ -1,6 +1,7 @@
 'use server'
 import Excel from "exceljs";
 import { redirect } from "next/navigation";
+import prisma from "@/prisma/client";
 import path from "path";
 import randomString from "./utilities/randomString";
 import axios from "axios";
@@ -66,4 +67,16 @@ export async function sendMessage(message: string, users: string) {
             }
         )
     // console.log(result);
+}
+
+export async function findUser(ygdm: string) {
+    return await prisma.mis_V_CYP_YGSJ.findFirst({
+        select: {
+            ygdm: true,
+            ygmc: true
+        },
+        where: {
+            ygdm: ygdm
+        }
+    })
 }

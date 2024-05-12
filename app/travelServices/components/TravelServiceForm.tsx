@@ -21,6 +21,8 @@ import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import SelectedRatingUsers, { RatingUser } from "./SelectedRatingUsers";
 import { formatToRatingUser } from "./formatToRatingUser";
+import BatchInputButton from "./BatchInputButton";
+import { findUser } from "@/app/actions";
 
 interface Props {
   travelService?: TravelService;
@@ -138,9 +140,12 @@ const TravelServiceForm = ({ travelService }: Props) => {
             }
           />
 
-          <Heading size={"3"} color="gray" className="pt-3 px-3">
-            疗休养人员名单
-          </Heading>
+          <Flex justify={"between"} mr={"2"} align={"baseline"}>
+            <Heading size={"3"} color="gray" className="pt-3 px-3">
+              疗休养人员名单
+            </Heading>
+            <BatchInputButton onBatchUsersInput={handleUsersInput} />
+          </Flex>
 
           <Box pt="1">
             <SelectedRatingUsers
@@ -178,6 +183,28 @@ const TravelServiceForm = ({ travelService }: Props) => {
     setSelectedRatingUsers(
       selectedRatingUsers.filter((user) => user.ygdm !== unselectedUser.ygdm)
     );
+  }
+
+  async function handleUsersInput(users: string) {
+    // 分割成数组
+    // 对每一个元素
+    //   如果尚不存在，就检查是否是正式职工，如果是，设置员工代码和员工姓名。
+    // 添加到selectedRatingUsers.
+    let batchInputUsers: RatingUser[] = [];
+    await Promise.all(
+      users.split(",").map(async (user) => {
+        if (
+          selectedRatingUsers.filter((existUser) => existUser.ygdm === user)
+            .length === 0
+        ) {
+          const employee = await findUser(user);
+          if (employee)
+            batchInputUsers.push({ ygdm: employee.ygdm, ygmc: employee.ygmc });
+        }
+      })
+    );
+    // console.log(batchInputUsers);
+    setSelectedRatingUsers([...selectedRatingUsers, ...batchInputUsers]);
   }
 };
 
