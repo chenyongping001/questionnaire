@@ -3,6 +3,8 @@ import Excel from "exceljs";
 import { redirect } from "next/navigation";
 import path from "path";
 import randomString from "./utilities/randomString";
+import axios from "axios";
+import { env } from "process";
 export type Header = {
     key: string; header: string;
 }
@@ -40,4 +42,28 @@ export async function saveToExcel(headers: Header[], rows: unknown[]) {
     }
     redirect(`${urlPrefix}/${fileName}`);
 
+}
+
+export async function sendMessage(message: string, users: string) {
+    const access_token = await axios
+        .get(
+            `https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=${env.WX_APPID}&corpsecret=${env.WX_MESSAGE_CORPSECRET}`
+        )
+        .then((res) => res.data["access_token"]);
+
+    // console.log(access_token);
+
+    const result = await axios
+        .post(
+            `https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${access_token}`,
+            {
+                "touser": users,
+                "msgtype": "text",
+                "agentid": env.WX_MESSAGE_AGENTID,
+                "text": {
+                    "content": message,
+                },
+            }
+        )
+    // console.log(result);
 }

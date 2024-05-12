@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Spinner from "@/app/components/Spinner";
 import axios from "axios";
 import { FieldValues } from "react-hook-form";
+import { sendMessage } from "@/app/actions";
 
 interface Props {
   travelService: TravelService;
@@ -86,7 +87,15 @@ const StatusSwitch = ({ travelService }: Props) => {
               <Button
                 variant="solid"
                 color="red"
-                onClick={() => ChangeStatusOfTravelService("RATING")}
+                onClick={() => {
+                  ChangeStatusOfTravelService("RATING");
+                  const users = travelService.ratingUsers
+                    .split(",")
+                    .map((user) => user.split("|")[0])
+                    .join("|");
+                  const message = `疗休养评价：<a href="https://questionnaire.td.masterpeak.cn/travelServices/${travelService.id}">请您对本次${travelService.travelDestination}的疗休养进行评价!</a>`;
+                  sendMessage(message, users);
+                }}
               >
                 开启评价
               </Button>
