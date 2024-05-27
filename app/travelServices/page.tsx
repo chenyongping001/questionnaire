@@ -38,7 +38,8 @@ const TravelServicesPage = async () => {
     { key: "travelEndDate", header: "结束日期", width: 15 },
     { key: "createBy", header: "创建人", width: 15 },
     { key: "createAt", header: "创建时间", width: 20 },
-    { key: "ratingUsers", header: "参团人员", width: 50 },
+    { key: "ratingUsers", header: "参团人员及评分", width: 50 },
+    { key: "avarageScore", header: "平均评分", width: 10 },
     { key: "description", header: "说明", width: 50 },
   ];
 
@@ -48,8 +49,21 @@ const TravelServicesPage = async () => {
     createAt: convertDateToString(travel.createAt),
     ratingUsers: travel.ratingUsers
       .split(",")
-      .map((user) => user.split("|")[1])
+      .map(
+        (user) =>
+          `${user.split("|")[1]}${
+            travel.UserRatingOfTracelService.find(
+              (rating) => rating.ratingBy === user
+            )?.score ?? ""
+          }`
+      )
       .join(","),
+    avarageScore: travel.UserRatingOfTracelService.length
+      ? travel.UserRatingOfTracelService.reduce(
+          (prev, cur) => prev + cur.score,
+          0
+        ) / travel.UserRatingOfTracelService.length
+      : "",
   }));
 
   return (
