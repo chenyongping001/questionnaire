@@ -64,7 +64,9 @@ const RatingsPage = async ({ params }: Props) => {
         <Heading size={"3"} color="gray" className="pt-3 px-3">
           用户评价详情
         </Heading>
-        {rows.length > 0 && <ExportExcelLink headers={columns} rows={rows} />}
+        {rows.length > 0 && session?.user?.role === "ADMIN" && (
+          <ExportExcelLink headers={columns} rows={rows} />
+        )}
       </Flex>
       <Table.Root variant="surface">
         <Table.Header>

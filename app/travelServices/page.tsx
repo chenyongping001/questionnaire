@@ -8,7 +8,7 @@ import TravelServiceStatusBadge from "../components/TravelServiceStatusBadge";
 import AvarageScoreBadge from "./[id]/ratings/components/AvarageScoreBadge";
 import ExportExcelLink from "./components/ExportExcelLink";
 import TravelServiceActions from "./components/TravelServiceActions";
-import { convertDateToString } from "../utilities/trimTime";
+import { convertDateToString, keep2Dec } from "../utilities/trimTime";
 
 const TravelServicesPage = async () => {
   const session = await getServerSession(authOptions);
@@ -59,10 +59,12 @@ const TravelServicesPage = async () => {
       )
       .join(","),
     avarageScore: travel.UserRatingOfTracelService.length
-      ? travel.UserRatingOfTracelService.reduce(
-          (prev, cur) => prev + cur.score,
-          0
-        ) / travel.UserRatingOfTracelService.length
+      ? keep2Dec(
+          travel.UserRatingOfTracelService.reduce(
+            (prev, cur) => prev + cur.score,
+            0
+          ) / travel.UserRatingOfTracelService.length
+        )
       : "",
   }));
 
@@ -75,7 +77,9 @@ const TravelServicesPage = async () => {
             疗休养批次列表
           </Heading>
         )}
-        {rows.length > 0 && <ExportExcelLink headers={columns} rows={rows} />}
+        {rows.length > 0 && user.role === "ADMIN" && (
+          <ExportExcelLink headers={columns} rows={rows} />
+        )}
       </Flex>
       <Table.Root variant="surface">
         <Table.Header>
